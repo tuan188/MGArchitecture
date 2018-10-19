@@ -3,7 +3,7 @@ import RxCocoa
 import OrderedSet
 
 extension ViewModelType {
-    func setupLoadMorePaging<T>(loadTrigger: Driver<Void>,
+    public func setupLoadMorePaging<T>(loadTrigger: Driver<Void>,
                                 getItems: @escaping () -> Observable<PagingInfo<T>>,
                                 refreshTrigger: Driver<Void>,
                                 refreshItems: @escaping () -> Observable<PagingInfo<T>>,
@@ -32,7 +32,7 @@ extension ViewModelType {
                 })
     }
     
-    func setupLoadMorePaging<T, V>(loadTrigger: Driver<Void>,
+    public func setupLoadMorePaging<T, V>(loadTrigger: Driver<Void>,
                                    getItems: @escaping () -> Observable<PagingInfo<T>>,
                                    refreshTrigger: Driver<Void>,
                                    refreshItems: @escaping () -> Observable<PagingInfo<T>>,
@@ -65,7 +65,7 @@ extension ViewModelType {
 }
 
 extension ViewModelType {
-    func setupLoadMorePagingWithParam<T, U>(loadTrigger: Driver<U>,
+    public func setupLoadMorePagingWithParam<T, U>(loadTrigger: Driver<U>,
                                             getItems: @escaping (U) -> Observable<PagingInfo<T>>,
                                             refreshTrigger: Driver<U>,
                                             refreshItems: @escaping (U) -> Observable<PagingInfo<T>>,
@@ -169,7 +169,7 @@ extension ViewModelType {
                     loadingMore)
     }
     
-    func setupLoadMorePagingWithParam<T, U, V>(loadTrigger: Driver<U>,
+    public func setupLoadMorePagingWithParam<T, U, V>(loadTrigger: Driver<U>,
                                                getItems: @escaping (U) -> Observable<PagingInfo<T>>,
                                                refreshTrigger: Driver<U>,
                                                refreshItems: @escaping (U) -> Observable<PagingInfo<T>>,

@@ -23,11 +23,11 @@ extension ObservableType {
 
 extension SharedSequenceConvertibleType {
     
-    func mapToVoid() -> SharedSequence<SharingStrategy, Void> {
+    public func mapToVoid() -> SharedSequence<SharingStrategy, Void> {
         return map { _ in }
     }
     
-    func mapToOptional() -> SharedSequence<SharingStrategy, E?> {
+    public func mapToOptional() -> SharedSequence<SharingStrategy, E?> {
         return map { value -> E? in value }
     }
     
@@ -44,23 +44,23 @@ extension SharedSequenceConvertibleType {
 
 extension ObservableType {
     
-    func catchErrorJustComplete() -> Observable<E> {
+    public func catchErrorJustComplete() -> Observable<E> {
         return catchError { _ in
             return Observable.empty()
         }
     }
     
-    func asDriverOnErrorJustComplete() -> Driver<E> {
+    public func asDriverOnErrorJustComplete() -> Driver<E> {
         return asDriver { _ in
             return Driver.empty()
         }
     }
     
-    func mapToVoid() -> Observable<Void> {
+    public func mapToVoid() -> Observable<Void> {
         return map { _ in }
     }
     
-    func mapToOptional() -> Observable<E?> {
+    public func mapToOptional() -> Observable<E?> {
         return map { value -> E? in value }
     }
 }
@@ -79,14 +79,14 @@ fileprivate func getThreadName() -> String {
 }
 
 extension ObservableType {
-    func dump() -> Observable<Self.E> {
+    public func dump() -> Observable<Self.E> {
         return self.do(onNext: { element in
             let threadName = getThreadName()
             print("[D] \(element) received on \(threadName)")
         })
     }
     
-    func dumpingSubscription() -> Disposable {
+    public func dumpingSubscription() -> Disposable {
         return self.subscribe(onNext: { element in
             let threadName = getThreadName()
             print("[S] \(element) received on \(threadName)")

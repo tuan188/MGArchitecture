@@ -10,7 +10,7 @@ public protocol BindableType: class {
 }
 
 extension BindableType where Self: UIViewController {
-    func bindViewModel(to model: Self.ViewModelType) {
+    public func bindViewModel(to model: Self.ViewModelType) {
         viewModel = model
         loadViewIfNeeded()
         bindViewModel()

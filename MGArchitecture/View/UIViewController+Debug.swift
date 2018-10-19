@@ -1,7 +1,7 @@
 import UIKit
 
 extension UIViewController {
-    func logDeinit() {
+    public func logDeinit() {
         print(String(describing: type(of: self)) + " deinit")
     }
 }
