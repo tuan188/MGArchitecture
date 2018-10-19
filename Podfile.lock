@@ -1,0 +1,25 @@
+PODS:
+  - OrderedSet (3.0.0)
+  - RxCocoa (4.1.2):
+    - RxSwift (~> 4.0)
+  - RxSwift (4.1.2)
+
+DEPENDENCIES:
+  - OrderedSet (= 3.0)
+  - RxCocoa (= 4.1.2)
+  - RxSwift (= 4.1.2)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - OrderedSet
+    - RxCocoa
+    - RxSwift
+
+SPEC CHECKSUMS:
+  OrderedSet: b990e16dcf6b79f1d3826b996b1eb613c696eec0
+  RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
+  RxSwift: e49536837d9901277638493ea537394d4b55f570
+
+PODFILE CHECKSUM: 02a8e532696e760ef6d5e63225b2f6b2dab32976
+
+COCOAPODS: 1.5.3
