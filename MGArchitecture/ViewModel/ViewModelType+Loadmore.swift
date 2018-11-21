@@ -154,7 +154,7 @@ extension ViewModelType {
                 .filter { !$0.items.isEmpty }
                 .do(onNext: { page in
                     let currentPage = pageSubject.value
-                    let items: OrderedSet<T> = currentPage.items + page.items
+                    let items = currentPage.items + page.items
                     let newPage = PagingInfo<T>(page: page.page, items: items)
                     pageSubject.accept(newPage)
                 })
@@ -213,7 +213,7 @@ extension ViewModelType {
                 }
                 .do(onNext: { page in
                     let newPage = PagingInfo<V>(page: page.page,
-                                                items: OrderedSet(sequence: page.items.map(mapper)))
+                                                items: page.items.map(mapper))
                     pageSubject.accept(newPage)
                 })
                 .mapToVoid()
@@ -232,7 +232,7 @@ extension ViewModelType {
                 }
                 .do(onNext: { page in
                     let newPage = PagingInfo<V>(page: page.page,
-                                                items: OrderedSet(sequence: page.items.map(mapper)))
+                                                items: page.items.map(mapper))
                     pageSubject.accept(newPage)
                 })
                 .mapToVoid()
@@ -263,7 +263,7 @@ extension ViewModelType {
                 .filter { !$0.items.isEmpty }
                 .do(onNext: { page in
                     let currentPage = pageSubject.value
-                    let items: OrderedSet<V> = currentPage.items + page.items.map(mapper)
+                    let items = currentPage.items + page.items.map(mapper)
                     let newPage = PagingInfo<V>(page: page.page, items: items)
                     pageSubject.accept(newPage)
                 })
