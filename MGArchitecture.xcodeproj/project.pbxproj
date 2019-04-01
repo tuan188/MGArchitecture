@@ -175,7 +175,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1000;
-				ORGANIZATIONNAME = Framgia;
+				ORGANIZATIONNAME = "Sun Asterisk";
 				TargetAttributes = {
 					179F9EA721788F880018A62B = {
 						CreatedOnToolsVersion = 10.0;

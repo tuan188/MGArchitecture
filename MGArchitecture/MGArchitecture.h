@@ -3,7 +3,7 @@
 //  MGArchitecture
 //
 //  Created by Tuan Truong on 10/18/18.
-//  Copyright © 2018 Framgia. All rights reserved.
+//  Copyright © 2018 Sun Asterisk. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
