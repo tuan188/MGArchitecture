@@ -1,6 +1,5 @@
 import RxSwift
 import RxCocoa
-import OrderedSet
 
 extension ViewModelType {
     public func setupLoadMorePaging<T>(loadTrigger: Driver<Void>,

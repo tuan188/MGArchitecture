@@ -1,7 +1,9 @@
 platform :ios, '9.0'
 
 target 'MGArchitecture' do
-    pod 'RxSwift', '4.3'
-    pod 'RxCocoa', '4.3'
-    pod 'OrderedSet', '3.0'
+    inhibit_all_warnings!
+    
+    pod 'RxAtomic', '4.4', :modular_headers => true
+    pod 'RxSwift', '4.4'
+    pod 'RxCocoa', '4.4'
 end
