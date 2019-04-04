@@ -1,26 +1,49 @@
 PODS:
+  - "NSObject+Rx (4.4.0)":
+    - RxSwift (~> 4.3)
+  - Reusable (4.0.4):
+    - Reusable/Storyboard (= 4.0.4)
+    - Reusable/View (= 4.0.4)
+  - Reusable/Storyboard (4.0.4)
+  - Reusable/View (4.0.4)
   - RxAtomic (4.4.0)
   - RxCocoa (4.4.0):
     - RxSwift (~> 4.0)
   - RxSwift (4.4.0):
     - RxAtomic (~> 4.4)
+  - RxViewController (0.4.0):
+    - RxCocoa (>= 4.0.0)
+    - RxSwift (>= 4.0.0)
+  - Then (2.4.0)
 
 DEPENDENCIES:
+  - "NSObject+Rx (= 4.4)"
+  - Reusable (= 4.0.4)
   - RxAtomic (= 4.4)
   - RxCocoa (= 4.4)
   - RxSwift (= 4.4)
+  - RxViewController
+  - Then (= 2.4)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - "NSObject+Rx"
+    - Reusable
     - RxAtomic
     - RxCocoa
     - RxSwift
+    - RxViewController
+    - Then
 
 SPEC CHECKSUMS:
+  "NSObject+Rx": 3291262e7eddc434b6c98d1e85dedc4faa451ace
+  Reusable: 7fc772097df3e5fc86f59d8a7af9708e49b5ff55
   RxAtomic: eacf60db868c96bfd63320e28619fe29c179656f
   RxCocoa: df63ebf7b9a70d6b4eeea407ed5dd4efc8979749
   RxSwift: 5976ecd04fc2fefd648827c23de5e11157faa973
+  RxViewController: 359bbc2fda373a78605b2735afb0f9f4f3f6c3e4
+  Then: 71866660c7af35a7343831f7668e7cd2b62ee0f2
 
-PODFILE CHECKSUM: ce00ff27fd435ae7a1a29ad875fc9486e6e5281f
+PODFILE CHECKSUM: 5f24dc377f2859f0c9530a866b441a90100497c1
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.1
