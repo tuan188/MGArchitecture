@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		174015192256F96800838B91 /* Optional+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174015182256F96800838B91 /* Optional+.swift */; };
+		1740151B2256FACF00838B91 /* ViewModelType+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1740151A2256FACF00838B91 /* ViewModelType+.swift */; };
 		174185402255B25B000949E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1741853F2255B25B000949E9 /* AppDelegate.swift */; };
 		1741855D2255B2F3000949E9 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174185452255B2F3000949E9 /* Utils.swift */; };
 		174185632255B2F3000949E9 /* Storyboards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174185512255B2F3000949E9 /* Storyboards.swift */; };
@@ -47,6 +49,8 @@
 		172823EF2179791600380312 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		172823F02179791600380312 /* ViewModelType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 		172823F22179791600380312 /* Observable+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+.swift"; sourceTree = "<group>"; };
+		174015182256F96800838B91 /* Optional+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+.swift"; sourceTree = "<group>"; };
+		1740151A2256FACF00838B91 /* ViewModelType+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModelType+.swift"; sourceTree = "<group>"; };
 		1741853E2255B25A000949E9 /* MGArchitecture-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MGArchitecture-Bridging-Header.h"; sourceTree = "<group>"; };
 		1741853F2255B25B000949E9 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		174185452255B2F3000949E9 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -108,9 +112,10 @@
 			children = (
 				172823EC2179791600380312 /* BindableType.swift */,
 				172823ED2179791600380312 /* ErrorTracker.swift */,
-				172823EE2179791600380312 /* ViewModelType+Loadmore.swift */,
 				172823EF2179791600380312 /* ActivityIndicator.swift */,
 				172823F02179791600380312 /* ViewModelType.swift */,
+				172823EE2179791600380312 /* ViewModelType+Loadmore.swift */,
+				1740151A2256FACF00838B91 /* ViewModelType+.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				172823F22179791600380312 /* Observable+.swift */,
+				174015182256F96800838B91 /* Optional+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -371,6 +377,7 @@
 			files = (
 				174185842255B983000949E9 /* MainAssembler.swift in Sources */,
 				174185402255B25B000949E9 /* AppDelegate.swift in Sources */,
+				1740151B2256FACF00838B91 /* ViewModelType+.swift in Sources */,
 				174185672255B2F3000949E9 /* AppUseCase.swift in Sources */,
 				174185832255B983000949E9 /* MainNavigator.swift in Sources */,
 				174185722255B35C000949E9 /* HasID.swift in Sources */,
@@ -388,6 +395,7 @@
 				174185652255B2F3000949E9 /* AppNavigator.swift in Sources */,
 				174185642255B2F3000949E9 /* AppAssembler.swift in Sources */,
 				174185712255B35C000949E9 /* PagingInfo.swift in Sources */,
+				174015192256F96800838B91 /* Optional+.swift in Sources */,
 				174185632255B2F3000949E9 /* Storyboards.swift in Sources */,
 				1741855D2255B2F3000949E9 /* Utils.swift in Sources */,
 				1741857F2255B8E1000949E9 /* MainUseCase.swift in Sources */,

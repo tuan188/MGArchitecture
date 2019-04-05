@@ -10,46 +10,6 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-extension ObservableType where E == Bool {
-    /// Boolean not operator
-    public func not() -> Observable<Bool> {
-        return self.map(!)
-    }
-}
-
-extension ObservableType {
-    public func unwrap<T>() -> Observable<T> where E == T? {
-        return self
-            .filter { value in
-                if case .some = value {
-                    return true
-                }
-                return false
-            }.map { $0! }
-    }
-}
-
-extension SharedSequenceConvertibleType {
-    
-    public func mapToVoid() -> SharedSequence<SharingStrategy, Void> {
-        return map { _ in }
-    }
-    
-    public func mapToOptional() -> SharedSequence<SharingStrategy, E?> {
-        return map { value -> E? in value }
-    }
-    
-    public func unwrap<T>() -> SharedSequence<SharingStrategy, T> where E == T? {
-        return self
-            .filter { value in
-                if case .some = value {
-                    return true
-                }
-                return false
-            }.map { $0! }
-    }
-}
-
 extension ObservableType {
     
     public func catchErrorJustComplete() -> Observable<E> {
@@ -70,6 +30,39 @@ extension ObservableType {
     
     public func mapToOptional() -> Observable<E?> {
         return map { value -> E? in value }
+    }
+    
+    public func unwrap<T>() -> Observable<T> where E == T? {
+        return self
+            .flatMap { Observable.from(optional: $0) }
+    }
+}
+
+extension SharedSequenceConvertibleType {
+    
+    public func mapToVoid() -> SharedSequence<SharingStrategy, Void> {
+        return map { _ in }
+    }
+    
+    public func mapToOptional() -> SharedSequence<SharingStrategy, E?> {
+        return map { value -> E? in value }
+    }
+    
+    public func unwrap<T>() -> SharedSequence<SharingStrategy, T> where E == T? {
+        return self
+            .flatMap { SharedSequence.from(optional: $0) }
+    }
+}
+
+extension ObservableType where E == Bool {
+    public func not() -> Observable<Bool> {
+        return self.map(!)
+    }
+}
+
+extension SharedSequenceConvertibleType where E == Bool {
+    public func not() -> SharedSequence<SharingStrategy, Bool> {
+        return self.map(!)
     }
 }
 
