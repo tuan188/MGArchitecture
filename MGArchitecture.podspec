@@ -8,7 +8,7 @@ s.summary = "Clean Architecture with RxSwift and MVVM"
 s.requires_arc = true
 
 # 2
-s.version = "0.3.2"
+s.version = "0.4.0"
 
 # 3
 s.license = { :type => "MIT", :file => "LICENSE" }
@@ -25,18 +25,32 @@ s.source = { :git => "https://github.com/tuan188/MGArchitecture.git",
 
 # 7
 s.framework = "UIKit"
-s.dependency 'RxSwift', '~> 4.3'
-s.dependency 'RxCocoa', '~> 4.3'
-s.dependency 'OrderedSet', '~> 3.0'
+s.dependency 'RxAtomic', '~> 4.4'
+s.dependency 'RxSwift', '~> 4.4'
+s.dependency 'RxCocoa', '~> 4.4'
 
 # 8
-s.source_files = "MGArchitecture/**/*.{swift}"
+s.subspec 'Extensions' do |ss|
+    ss.source_files = "MGArchitecture/Sources/Extensions/*.{swift}"
+end
+
+s.subspec 'Model' do |ss|
+    ss.source_files = "MGArchitecture/Sources/Model/*.{swift}"
+end
+
+s.subspec 'View' do |ss|
+    ss.source_files = "MGArchitecture/Sources/View/*.{swift}"
+end
+
+s.subspec 'ViewModel' do |ss|
+    ss.source_files = "MGArchitecture/Sources/ViewModel/*.{swift}"
+end
 
 # 9
 # s.resources = "MGArchitecture/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
 
 # 10
-s.swift_version = "4.2"
+s.swift_version = "5.0"
 
 end
 
