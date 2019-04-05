@@ -30,21 +30,7 @@ s.dependency 'RxSwift', '~> 4.4'
 s.dependency 'RxCocoa', '~> 4.4'
 
 # 8
-s.subspec 'Extensions' do |ss|
-    ss.source_files = "MGArchitecture/Sources/Extensions/*.{swift}"
-end
-
-s.subspec 'Model' do |ss|
-    ss.source_files = "MGArchitecture/Sources/Model/*.{swift}"
-end
-
-s.subspec 'View' do |ss|
-    ss.source_files = "MGArchitecture/Sources/View/*.{swift}"
-end
-
-s.subspec 'ViewModel' do |ss|
-    ss.source_files = "MGArchitecture/Sources/ViewModel/*.{swift}"
-end
+s.source_files = "MGArchitecture/Sources/**/*.{swift}"
 
 # 9
 # s.resources = "MGArchitecture/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
