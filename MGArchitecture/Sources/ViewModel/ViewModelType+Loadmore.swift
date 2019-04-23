@@ -184,7 +184,7 @@ extension ViewModelType {
                         .trackActivity(loadingMoreActivityIndicator)
                         .asDriverOnErrorJustComplete()
                 }
-                .filter { !$0.items.isEmpty }
+                .filter { !$0.items.isEmpty || !$0.hasMorePages }
                 .do(onNext: { page in
                     let currentPage = pageSubject.value
                     let items = currentPage.items + page.items.map(mapper)
