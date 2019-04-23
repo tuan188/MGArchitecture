@@ -9,15 +9,15 @@
 public struct PagingInfo<T> {
     public var page: Int
     public var items: [T]
-    public var canLoadmore: Bool
+    public var hasMorePages: Bool
     
-    public init(page: Int, items: [T], canLoadmore: Bool) {
+    public init(page: Int, items: [T], hasMorePages: Bool) {
         self.page = page
         self.items = items
-        self.canLoadmore = canLoadmore
+        self.hasMorePages = hasMorePages
     }
     
     public init(page: Int, items: [T]) {
-        self.init(page: page, items: items, canLoadmore: true)
+        self.init(page: page, items: items, hasMorePages: true)
     }
 }

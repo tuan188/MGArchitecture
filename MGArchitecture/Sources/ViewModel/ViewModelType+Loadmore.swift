@@ -190,7 +190,7 @@ extension ViewModelType {
                     let items = currentPage.items + page.items.map(mapper)
                     let newPage = PagingInfo<V>(page: page.page,
                                                 items: items,
-                                                canLoadmore: page.canLoadmore)
+                                                hasMorePages: page.hasMorePages)
                     pageSubject.accept(newPage)
                 })
                 .mapToVoid()
