@@ -188,7 +188,9 @@ extension ViewModelType {
                 .do(onNext: { page in
                     let currentPage = pageSubject.value
                     let items = currentPage.items + page.items.map(mapper)
-                    let newPage = PagingInfo<V>(page: page.page, items: items)
+                    let newPage = PagingInfo<V>(page: page.page,
+                                                items: items,
+                                                canLoadmore: page.canLoadmore)
                     pageSubject.accept(newPage)
                 })
                 .mapToVoid()

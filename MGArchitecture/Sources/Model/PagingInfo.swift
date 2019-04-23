@@ -7,11 +7,17 @@
 //
 
 public struct PagingInfo<T> {
-    public let page: Int
-    public let items: [T]
+    public var page: Int
+    public var items: [T]
+    public var canLoadmore: Bool
     
-    public init(page: Int, items: [T]) {
+    public init(page: Int, items: [T], canLoadmore: Bool) {
         self.page = page
         self.items = items
+        self.canLoadmore = canLoadmore
+    }
+    
+    public init(page: Int, items: [T]) {
+        self.init(page: page, items: items, canLoadmore: true)
     }
 }

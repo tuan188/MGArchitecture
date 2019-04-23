@@ -8,7 +8,7 @@ s.summary = "Clean Architecture with RxSwift and MVVM"
 s.requires_arc = true
 
 # 2
-s.version = "0.4.0"
+s.version = "0.4.1"
 
 # 3
 s.license = { :type => "MIT", :file => "LICENSE" }
