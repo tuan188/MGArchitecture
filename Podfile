@@ -6,7 +6,6 @@ def pods
 #    pod 'RxAtomic', '5.0', :modular_headers => true
     pod 'RxSwift', '5.0'
     pod 'RxCocoa', '5.0'
-    pod 'RxViewController'
     pod 'NSObject+Rx', '5.0'
     
     pod 'Then', '2.4'
