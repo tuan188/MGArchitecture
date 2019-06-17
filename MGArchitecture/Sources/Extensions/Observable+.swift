@@ -66,11 +66,11 @@ extension SharedSequenceConvertibleType where Element == Bool {
     }
 }
 
-fileprivate func getThreadName() -> String {
+private func getThreadName() -> String {
     if Thread.current.isMainThread {
         return "Main Thread"
     } else if let name = Thread.current.name {
-        if name == "" {
+        if name.isEmpty {
             return "Anonymous Thread"
         }
         return name

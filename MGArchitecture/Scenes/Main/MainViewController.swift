@@ -35,8 +35,8 @@ final class MainViewController: UIViewController, BindableType {
     }
 
     func bindViewModel() {
-        let input = MainViewModel.Input()
-        _ = viewModel.transform(input)
+//        let input = MainViewModel.Input()
+//        _ = viewModel.transform(input)
     }
 }
 

@@ -8,12 +8,13 @@
 
 public protocol HasID {
     associatedtype IDType
+    
     var id: IDType { get }
 }
 
 extension Hashable where Self: HasID, Self.IDType == Int {
-    public var hashValue: Int {
-        return id
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
     
     public static func == (lhs: Self, rhs: Self) -> Bool {
@@ -22,8 +23,8 @@ extension Hashable where Self: HasID, Self.IDType == Int {
 }
 
 extension Hashable where Self: HasID, Self.IDType == String {
-    public var hashValue: Int {
-        return id.hashValue
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
     
     public static func == (lhs: Self, rhs: Self) -> Bool {

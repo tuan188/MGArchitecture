@@ -6,10 +6,17 @@
 //  Copyright © 2019 Sun Asterisk. All rights reserved.
 //
 
-protocol MainUseCaseType {
+import RxSwift
 
+protocol MainUseCaseType {
+    func getProductList() -> Observable<PagingInfo<Product>>
 }
 
 struct MainUseCase: MainUseCaseType {
-
+    func getProductList() -> Observable<PagingInfo<Product>> {
+        let products = [
+            Product()
+        ]
+        return Observable.just(PagingInfo(page: 1, items: products))
+    }
 }

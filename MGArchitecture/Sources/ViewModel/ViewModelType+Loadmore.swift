@@ -10,12 +10,13 @@ import RxSwift
 import RxCocoa
 
 extension ViewModelType {
+    @available(*, deprecated, renamed: "configPagination")
     public func setupLoadMorePaging<T>(loadTrigger: Driver<Void>,
-                                getItems: @escaping () -> Observable<PagingInfo<T>>,
-                                refreshTrigger: Driver<Void>,
-                                refreshItems: @escaping () -> Observable<PagingInfo<T>>,
-                                loadMoreTrigger: Driver<Void>,
-                                loadMoreItems: @escaping (Int) -> Observable<PagingInfo<T>>)
+                                       getItems: @escaping () -> Observable<PagingInfo<T>>,
+                                       refreshTrigger: Driver<Void>,
+                                       refreshItems: @escaping () -> Observable<PagingInfo<T>>,
+                                       loadMoreTrigger: Driver<Void>,
+                                       loadMoreItems: @escaping (Int) -> Observable<PagingInfo<T>>)
         ->
         (page: BehaviorRelay<PagingInfo<T>>,
         fetchItems: Driver<Void>,
@@ -41,13 +42,14 @@ extension ViewModelType {
             )
     }
     
+    @available(*, deprecated, renamed: "configPagination")
     public func setupLoadMorePaging<T, V>(loadTrigger: Driver<Void>,
-                                   getItems: @escaping () -> Observable<PagingInfo<T>>,
-                                   refreshTrigger: Driver<Void>,
-                                   refreshItems: @escaping () -> Observable<PagingInfo<T>>,
-                                   loadMoreTrigger: Driver<Void>,
-                                   loadMoreItems: @escaping (Int) -> Observable<PagingInfo<T>>,
-                                   mapper: @escaping (T) -> V)
+                                          getItems: @escaping () -> Observable<PagingInfo<T>>,
+                                          refreshTrigger: Driver<Void>,
+                                          refreshItems: @escaping () -> Observable<PagingInfo<T>>,
+                                          loadMoreTrigger: Driver<Void>,
+                                          loadMoreItems: @escaping (Int) -> Observable<PagingInfo<T>>,
+                                          mapper: @escaping (T) -> V)
         ->
         (page: BehaviorRelay<PagingInfo<V>>,
         fetchItems: Driver<Void>,
@@ -72,12 +74,13 @@ extension ViewModelType {
                 mapper: mapper)
     }
 
+    @available(*, deprecated, renamed: "configPagination")
     public func setupLoadMorePagingWithParam<T, U>(loadTrigger: Driver<U>,
-                                            getItems: @escaping (U) -> Observable<PagingInfo<T>>,
-                                            refreshTrigger: Driver<U>,
-                                            refreshItems: @escaping (U) -> Observable<PagingInfo<T>>,
-                                            loadMoreTrigger: Driver<U>,
-                                            loadMoreItems: @escaping (U, Int) -> Observable<PagingInfo<T>>)
+                                                   getItems: @escaping (U) -> Observable<PagingInfo<T>>,
+                                                   refreshTrigger: Driver<U>,
+                                                   refreshItems: @escaping (U) -> Observable<PagingInfo<T>>,
+                                                   loadMoreTrigger: Driver<U>,
+                                                   loadMoreItems: @escaping (U, Int) -> Observable<PagingInfo<T>>)
         ->
         (page: BehaviorRelay<PagingInfo<T>>,
         fetchItems: Driver<Void>,
@@ -97,13 +100,14 @@ extension ViewModelType {
             )
     }
     
+    @available(*, deprecated, renamed: "configPagination")
     public func setupLoadMorePagingWithParam<T, U, V>(loadTrigger: Driver<U>,
-                                               getItems: @escaping (U) -> Observable<PagingInfo<T>>,
-                                               refreshTrigger: Driver<U>,
-                                               refreshItems: @escaping (U) -> Observable<PagingInfo<T>>,
-                                               loadMoreTrigger: Driver<U>,
-                                               loadMoreItems: @escaping (U, Int) -> Observable<PagingInfo<T>>,
-                                               mapper: @escaping (T) -> V)
+                                                      getItems: @escaping (U) -> Observable<PagingInfo<T>>,
+                                                      refreshTrigger: Driver<U>,
+                                                      refreshItems: @escaping (U) -> Observable<PagingInfo<T>>,
+                                                      loadMoreTrigger: Driver<U>,
+                                                      loadMoreItems: @escaping (U, Int) -> Observable<PagingInfo<T>>,
+                                                      mapper: @escaping (T) -> V)
         ->
         (page: BehaviorRelay<PagingInfo<V>>,
         fetchItems: Driver<Void>,

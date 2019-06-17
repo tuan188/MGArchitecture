@@ -32,6 +32,8 @@
 		1741857F2255B8E1000949E9 /* MainUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1741857A2255B8E1000949E9 /* MainUseCase.swift */; };
 		174185832255B983000949E9 /* MainNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174185812255B983000949E9 /* MainNavigator.swift */; };
 		174185842255B983000949E9 /* MainAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174185822255B983000949E9 /* MainAssembler.swift */; };
+		17CC16C822B73AF600A01FC1 /* ViewModelType+Pagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CC16C722B73AF600A01FC1 /* ViewModelType+Pagination.swift */; };
+		17CC16CA22B745EC00A01FC1 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CC16C922B745EC00A01FC1 /* Product.swift */; };
 		17FDAEFC2252028000F5165F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17FDAEFA2252028000F5165F /* Main.storyboard */; };
 		17FDAEFE2252028100F5165F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17FDAEFD2252028100F5165F /* Assets.xcassets */; };
 		17FDAF012252028100F5165F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17FDAEFF2252028100F5165F /* LaunchScreen.storyboard */; };
@@ -66,6 +68,8 @@
 		1741857A2255B8E1000949E9 /* MainUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainUseCase.swift; sourceTree = "<group>"; };
 		174185812255B983000949E9 /* MainNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigator.swift; sourceTree = "<group>"; };
 		174185822255B983000949E9 /* MainAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainAssembler.swift; sourceTree = "<group>"; };
+		17CC16C722B73AF600A01FC1 /* ViewModelType+Pagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModelType+Pagination.swift"; sourceTree = "<group>"; };
+		17CC16C922B745EC00A01FC1 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		17FDAEF42252028000F5165F /* MGArchitecture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MGArchitecture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17FDAEFB2252028000F5165F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		17FDAEFD2252028100F5165F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -115,6 +119,7 @@
 				172823EF2179791600380312 /* ActivityIndicator.swift */,
 				172823F02179791600380312 /* ViewModelType.swift */,
 				172823EE2179791600380312 /* ViewModelType+Loadmore.swift */,
+				17CC16C722B73AF600A01FC1 /* ViewModelType+Pagination.swift */,
 				1740151A2256FACF00838B91 /* ViewModelType+.swift */,
 			);
 			path = ViewModel;
@@ -185,6 +190,7 @@
 		174185582255B2F3000949E9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				17CC16C922B745EC00A01FC1 /* Product.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -288,6 +294,7 @@
 				17FDAEF02252028000F5165F /* Sources */,
 				17FDAEF12252028000F5165F /* Frameworks */,
 				17FDAEF22252028000F5165F /* Resources */,
+				17CC16C622B735DA00A01FC1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -346,6 +353,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		17CC16C622B735DA00A01FC1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
 		4D209D42830520A000CC54F1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -383,6 +407,7 @@
 				174185722255B35C000949E9 /* HasID.swift in Sources */,
 				174185702255B359000949E9 /* UIViewController+Debug.swift in Sources */,
 				174185662255B2F3000949E9 /* AppViewModel.swift in Sources */,
+				17CC16C822B73AF600A01FC1 /* ViewModelType+Pagination.swift in Sources */,
 				1741856D2255B354000949E9 /* ViewModelType+Loadmore.swift in Sources */,
 				1741856E2255B354000949E9 /* ActivityIndicator.swift in Sources */,
 				1741856A2255B306000949E9 /* UnitTestViewController.swift in Sources */,
@@ -394,6 +419,7 @@
 				1741857E2255B8E1000949E9 /* MainViewModel.swift in Sources */,
 				174185652255B2F3000949E9 /* AppNavigator.swift in Sources */,
 				174185642255B2F3000949E9 /* AppAssembler.swift in Sources */,
+				17CC16CA22B745EC00A01FC1 /* Product.swift in Sources */,
 				174185712255B35C000949E9 /* PagingInfo.swift in Sources */,
 				174015192256F96800838B91 /* Optional+.swift in Sources */,
 				174185632255B2F3000949E9 /* Storyboards.swift in Sources */,
