@@ -11,7 +11,7 @@ import RxCocoa
 
 extension ViewModelType {
     
-    func checkIfDataIsEmpty<T: Collection>(fetchItemsTrigger: Driver<Void>,
+    public func checkIfDataIsEmpty<T: Collection>(fetchItemsTrigger: Driver<Void>,
                                            loadTrigger: Driver<Bool>,
                                            items: Driver<T>) -> Driver<Bool> {
         return Driver.combineLatest(fetchItemsTrigger, loadTrigger)

@@ -12,13 +12,13 @@ import RxCocoa
 
 extension ObservableType {
     
-    public func catchErrorJustComplete() -> Observable<E> {
+    public func catchErrorJustComplete() -> Observable<Element> {
         return catchError { _ in
             return Observable.empty()
         }
     }
     
-    public func asDriverOnErrorJustComplete() -> Driver<E> {
+    public func asDriverOnErrorJustComplete() -> Driver<Element> {
         return asDriver { _ in
             return Driver.empty()
         }
@@ -28,11 +28,11 @@ extension ObservableType {
         return map { _ in }
     }
     
-    public func mapToOptional() -> Observable<E?> {
-        return map { value -> E? in value }
+    public func mapToOptional() -> Observable<Element?> {
+        return map { value -> Element? in value }
     }
     
-    public func unwrap<T>() -> Observable<T> where E == T? {
+    public func unwrap<T>() -> Observable<T> where Element == T? {
         return self
             .flatMap { Observable.from(optional: $0) }
     }
@@ -44,23 +44,23 @@ extension SharedSequenceConvertibleType {
         return map { _ in }
     }
     
-    public func mapToOptional() -> SharedSequence<SharingStrategy, E?> {
-        return map { value -> E? in value }
+    public func mapToOptional() -> SharedSequence<SharingStrategy, Element?> {
+        return map { value -> Element? in value }
     }
     
-    public func unwrap<T>() -> SharedSequence<SharingStrategy, T> where E == T? {
+    public func unwrap<T>() -> SharedSequence<SharingStrategy, T> where Element == T? {
         return self
             .flatMap { SharedSequence.from(optional: $0) }
     }
 }
 
-extension ObservableType where E == Bool {
+extension ObservableType where Element == Bool {
     public func not() -> Observable<Bool> {
         return self.map(!)
     }
 }
 
-extension SharedSequenceConvertibleType where E == Bool {
+extension SharedSequenceConvertibleType where Element == Bool {
     public func not() -> SharedSequence<SharingStrategy, Bool> {
         return self.map(!)
     }
@@ -80,7 +80,7 @@ fileprivate func getThreadName() -> String {
 }
 
 extension ObservableType {
-    public func dump() -> Observable<Self.E> {
+    public func dump() -> Observable<Self.Element> {
         return self.do(onNext: { element in
             let threadName = getThreadName()
             print("[D] \(element) received on \(threadName)")

@@ -1,27 +1,27 @@
 PODS:
-  - "NSObject+Rx (4.4.0)":
-    - RxSwift (~> 4.3)
-  - Reusable (4.0.4):
-    - Reusable/Storyboard (= 4.0.4)
-    - Reusable/View (= 4.0.4)
-  - Reusable/Storyboard (4.0.4)
-  - Reusable/View (4.0.4)
-  - RxAtomic (4.4.0)
-  - RxCocoa (4.4.0):
-    - RxSwift (~> 4.0)
-  - RxSwift (4.4.0):
-    - RxAtomic (~> 4.4)
+  - "NSObject+Rx (5.0.0)":
+    - RxSwift (~> 5.0)
+  - Reusable (4.1.0):
+    - Reusable/Storyboard (= 4.1.0)
+    - Reusable/View (= 4.1.0)
+  - Reusable/Storyboard (4.1.0)
+  - Reusable/View (4.1.0)
+  - RxCocoa (5.0.0):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxRelay (5.0.0):
+    - RxSwift (~> 5)
+  - RxSwift (5.0.0)
   - RxViewController (0.4.0):
     - RxCocoa (>= 4.0.0)
     - RxSwift (>= 4.0.0)
   - Then (2.4.0)
 
 DEPENDENCIES:
-  - "NSObject+Rx (= 4.4)"
-  - Reusable (= 4.0.4)
-  - RxAtomic (= 4.4)
-  - RxCocoa (= 4.4)
-  - RxSwift (= 4.4)
+  - "NSObject+Rx (= 5.0)"
+  - Reusable (= 4.1.0)
+  - RxCocoa (= 5.0)
+  - RxSwift (= 5.0)
   - RxViewController
   - Then (= 2.4)
 
@@ -29,21 +29,21 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - "NSObject+Rx"
     - Reusable
-    - RxAtomic
     - RxCocoa
+    - RxRelay
     - RxSwift
     - RxViewController
     - Then
 
 SPEC CHECKSUMS:
-  "NSObject+Rx": 3291262e7eddc434b6c98d1e85dedc4faa451ace
-  Reusable: 7fc772097df3e5fc86f59d8a7af9708e49b5ff55
-  RxAtomic: eacf60db868c96bfd63320e28619fe29c179656f
-  RxCocoa: df63ebf7b9a70d6b4eeea407ed5dd4efc8979749
-  RxSwift: 5976ecd04fc2fefd648827c23de5e11157faa973
+  "NSObject+Rx": 6151a97d171f7187c4183746acc42d9451952a7b
+  Reusable: 82be188f29d96dc5eff0db7b2393bcc08d2cdd5b
+  RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
+  RxRelay: 4f7409406a51a55cd88483f21ed898c234d60f18
+  RxSwift: 8b0671caa829a763bbce7271095859121cbd895f
   RxViewController: 359bbc2fda373a78605b2735afb0f9f4f3f6c3e4
   Then: 71866660c7af35a7343831f7668e7cd2b62ee0f2
 
-PODFILE CHECKSUM: 5f24dc377f2859f0c9530a866b441a90100497c1
+PODFILE CHECKSUM: 0f8ba006726746564879567066ec6228fd35b3f2
 
 COCOAPODS: 1.6.1

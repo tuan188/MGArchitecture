@@ -18,7 +18,7 @@ open class ErrorTracker: SharedSequenceConvertibleType {
         
     }
 
-    open func trackError<O: ObservableConvertibleType>(from source: O) -> Observable<O.E> {
+    open func trackError<O: ObservableConvertibleType>(from source: O) -> Observable<O.Element> {
         return source.asObservable().do(onError: onError)
     }
 
@@ -40,7 +40,7 @@ open class ErrorTracker: SharedSequenceConvertibleType {
 }
 
 extension ObservableConvertibleType {
-    public func trackError(_ errorTracker: ErrorTracker) -> Observable<E> {
+    public func trackError(_ errorTracker: ErrorTracker) -> Observable<Element> {
         return errorTracker.trackError(from: self)
     }
 }
