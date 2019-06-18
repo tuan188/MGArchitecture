@@ -23,8 +23,8 @@ extension MainViewModel: ViewModelType {
 
     struct Output {
         let error: Driver<Error>
-        let loading: Driver<Bool>
-        let reloading: Driver<Bool>
+        let isLoading: Driver<Bool>
+        let isReloading: Driver<Bool>
         let fetchItems: Driver<Void>
         let productList: Driver<[Product]>
     }
@@ -32,20 +32,19 @@ extension MainViewModel: ViewModelType {
     func transform(_ input: Input) -> Output {
         let configOutput = configPagination(
             loadTrigger: input.loadTrigger,
-            getItems: useCase.getProductList,
             reloadTrigger: input.reloadTrigger,
-            reloadItems: useCase.getProductList
+            getItems: useCase.getProductList
         )
         
-        let (page, fetchItems, loadError, loading, reloading) = configOutput
+        let (page, fetchItems, loadError, isLoading, isReloading) = configOutput
         
         let productList = page
             .map { $0.items.map { $0 } }
             .asDriverOnErrorJustComplete()
         
         return Output(error: loadError,
-                      loading: loading,
-                      reloading: reloading,
+                      isLoading: isLoading,
+                      isReloading: isReloading,
                       fetchItems: fetchItems,
                       productList: productList)
         

@@ -23,9 +23,9 @@ extension ViewModelType {
         (page: BehaviorRelay<PagingInfo<MappedItem>>,
         fetchItems: Driver<Void>,
         error: Driver<Error>,
-        loading: Driver<Bool>,
-        reloading: Driver<Bool>,
-        loadingMore: Driver<Bool>) {
+        isLoading: Driver<Bool>,
+        isReloading: Driver<Bool>,
+        isLoadingMore: Driver<Bool>) {
             
             let pageSubject = BehaviorRelay<PagingInfo<MappedItem>>(value: PagingInfo<MappedItem>(page: 1, items: []))
             let errorTracker = ErrorTracker()
@@ -129,9 +129,9 @@ extension ViewModelType {
         (page: BehaviorRelay<PagingInfo<Item>>,
         fetchItems: Driver<Void>,
         error: Driver<Error>,
-        loading: Driver<Bool>,
-        reloading: Driver<Bool>,
-        loadingMore: Driver<Bool>) {
+        isLoading: Driver<Bool>,
+        isReloading: Driver<Bool>,
+        isLoadingMore: Driver<Bool>) {
             
             return configPagination(
                 loadTrigger: loadTrigger,
@@ -150,6 +150,35 @@ extension ViewModelType {
     }
     
     public func configPagination<Item>(loadTrigger: Driver<Void>,
+                                       reloadTrigger: Driver<Void>,
+                                       getItems: @escaping () -> Observable<PagingInfo<Item>>,
+                                       loadMoreTrigger: Driver<Void>,
+                                       loadMoreItems: @escaping (Int) -> Observable<PagingInfo<Item>>)
+        ->
+        (page: BehaviorRelay<PagingInfo<Item>>,
+        fetchItems: Driver<Void>,
+        error: Driver<Error>,
+        isLoading: Driver<Bool>,
+        isReloading: Driver<Bool>,
+        isLoadingMore: Driver<Bool>) {
+            
+            return configPagination(
+                loadTrigger: loadTrigger,
+                getItems: { _ in
+                    return getItems()
+                },
+                reloadTrigger: reloadTrigger,
+                reloadItems: { _ in
+                    return getItems()
+                },
+                loadMoreTrigger: loadMoreTrigger,
+                loadMoreItems: { _, page in
+                    return loadMoreItems(page)
+                },
+                mapper: { $0 })
+    }
+    
+    public func configPagination<Item>(loadTrigger: Driver<Void>,
                                        getItems: @escaping () -> Observable<PagingInfo<Item>>,
                                        reloadTrigger: Driver<Void>,
                                        reloadItems: @escaping () -> Observable<PagingInfo<Item>>)
@@ -157,8 +186,8 @@ extension ViewModelType {
         (page: BehaviorRelay<PagingInfo<Item>>,
         fetchItems: Driver<Void>,
         error: Driver<Error>,
-        loading: Driver<Bool>,
-        reloading: Driver<Bool>) {
+        isLoading: Driver<Bool>,
+        isReloading: Driver<Bool>) {
             
             let result = configPagination(
                 loadTrigger: loadTrigger,
@@ -175,6 +204,34 @@ extension ViewModelType {
                 },
                 mapper: { $0 }
             )
-            return (result.page, result.fetchItems, result.error, result.loading, result.reloading)
+            return (result.page, result.fetchItems, result.error, result.isLoading, result.isReloading)
+    }
+    
+    public func configPagination<Item>(loadTrigger: Driver<Void>,
+                                       reloadTrigger: Driver<Void>,
+                                       getItems: @escaping () -> Observable<PagingInfo<Item>>)
+        ->
+        (page: BehaviorRelay<PagingInfo<Item>>,
+        fetchItems: Driver<Void>,
+        error: Driver<Error>,
+        isLoading: Driver<Bool>,
+        isReloading: Driver<Bool>) {
+            
+            let result = configPagination(
+                loadTrigger: loadTrigger,
+                getItems: { _ in
+                    return getItems()
+                },
+                reloadTrigger: reloadTrigger,
+                reloadItems: { _ in
+                    return getItems()
+                },
+                loadMoreTrigger: Driver.empty(),
+                loadMoreItems: { _, _ in
+                    return Observable.empty()
+                },
+                mapper: { $0 }
+            )
+            return (result.page, result.fetchItems, result.error, result.isLoading, result.isReloading)
     }
 }
