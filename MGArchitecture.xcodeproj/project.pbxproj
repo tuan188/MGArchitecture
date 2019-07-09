@@ -32,6 +32,7 @@
 		1741857F2255B8E1000949E9 /* MainUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1741857A2255B8E1000949E9 /* MainUseCase.swift */; };
 		174185832255B983000949E9 /* MainNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174185812255B983000949E9 /* MainNavigator.swift */; };
 		174185842255B983000949E9 /* MainAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174185822255B983000949E9 /* MainAssembler.swift */; };
+		17BFD1B622D3442200C8A3ED /* MultiActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BFD1B522D3442200C8A3ED /* MultiActivityIndicator.swift */; };
 		17CC16C822B73AF600A01FC1 /* ViewModelType+Pagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CC16C722B73AF600A01FC1 /* ViewModelType+Pagination.swift */; };
 		17CC16CA22B745EC00A01FC1 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CC16C922B745EC00A01FC1 /* Product.swift */; };
 		17FDAEFC2252028000F5165F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17FDAEFA2252028000F5165F /* Main.storyboard */; };
@@ -68,6 +69,7 @@
 		1741857A2255B8E1000949E9 /* MainUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainUseCase.swift; sourceTree = "<group>"; };
 		174185812255B983000949E9 /* MainNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigator.swift; sourceTree = "<group>"; };
 		174185822255B983000949E9 /* MainAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainAssembler.swift; sourceTree = "<group>"; };
+		17BFD1B522D3442200C8A3ED /* MultiActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiActivityIndicator.swift; sourceTree = "<group>"; };
 		17CC16C722B73AF600A01FC1 /* ViewModelType+Pagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModelType+Pagination.swift"; sourceTree = "<group>"; };
 		17CC16C922B745EC00A01FC1 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		17FDAEF42252028000F5165F /* MGArchitecture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MGArchitecture.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,6 +119,7 @@
 				172823EC2179791600380312 /* BindableType.swift */,
 				172823ED2179791600380312 /* ErrorTracker.swift */,
 				172823EF2179791600380312 /* ActivityIndicator.swift */,
+				17BFD1B522D3442200C8A3ED /* MultiActivityIndicator.swift */,
 				172823F02179791600380312 /* ViewModelType.swift */,
 				172823EE2179791600380312 /* ViewModelType+Loadmore.swift */,
 				17CC16C722B73AF600A01FC1 /* ViewModelType+Pagination.swift */,
@@ -411,6 +414,7 @@
 				1741856D2255B354000949E9 /* ViewModelType+Loadmore.swift in Sources */,
 				1741856E2255B354000949E9 /* ActivityIndicator.swift in Sources */,
 				1741856A2255B306000949E9 /* UnitTestViewController.swift in Sources */,
+				17BFD1B622D3442200C8A3ED /* MultiActivityIndicator.swift in Sources */,
 				174185732255B361000949E9 /* Observable+.swift in Sources */,
 				1741856F2255B354000949E9 /* ViewModelType.swift in Sources */,
 				1741856B2255B354000949E9 /* BindableType.swift in Sources */,

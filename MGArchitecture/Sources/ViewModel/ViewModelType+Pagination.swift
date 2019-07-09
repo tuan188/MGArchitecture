@@ -111,6 +111,7 @@ extension ViewModelType {
                 .mapToVoid()
             
             let fetchItems = Driver.merge(loadItems, reloadItems, loadMoreItems)
+            
             return (pageSubject,
                     fetchItems,
                     errorTracker.asDriver(),
@@ -204,6 +205,7 @@ extension ViewModelType {
                 },
                 mapper: { $0 }
             )
+            
             return (result.page, result.fetchItems, result.error, result.isLoading, result.isReloading)
     }
     
@@ -232,6 +234,36 @@ extension ViewModelType {
                 },
                 mapper: { $0 }
             )
+            
             return (result.page, result.fetchItems, result.error, result.isLoading, result.isReloading)
+    }
+    
+    public func configPagination<Item>(loadTrigger: Driver<Void>,
+                                       reloadTrigger: Driver<Void>,
+                                       loadMoreTrigger: Driver<Void>,
+                                       getItems: @escaping (Int) -> Observable<PagingInfo<Item>>)
+        ->
+        (page: BehaviorRelay<PagingInfo<Item>>,
+        fetchItems: Driver<Void>,
+        error: Driver<Error>,
+        isLoading: Driver<Bool>,
+        isReloading: Driver<Bool>,
+        isLoadingMore: Driver<Bool>) {
+            
+            return configPagination(
+                loadTrigger: loadTrigger,
+                getItems: { _ in
+                    return getItems(1)
+                },
+                reloadTrigger: reloadTrigger,
+                reloadItems: { _ in
+                    return getItems(1)
+                },
+                loadMoreTrigger: loadMoreTrigger,
+                loadMoreItems: { _, page in
+                    return getItems(page)
+                },
+                mapper: { $0 }
+            )
     }
 }
