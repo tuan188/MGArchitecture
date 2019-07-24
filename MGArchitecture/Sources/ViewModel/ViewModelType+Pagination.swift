@@ -10,13 +10,13 @@ import RxSwift
 import RxCocoa
 
 public struct PaginationResult<T> {
-    var page: Driver<PagingInfo<T>>
-    var error: Driver<Error>
-    var isLoading: Driver<Bool>
-    var isReloading: Driver<Bool>
-    var isLoadingMore: Driver<Bool>
+    public var page: Driver<PagingInfo<T>>
+    public var error: Driver<Error>
+    public var isLoading: Driver<Bool>
+    public var isReloading: Driver<Bool>
+    public var isLoadingMore: Driver<Bool>
     
-    var destructured: (Driver<PagingInfo<T>>, Driver<Error>, Driver<Bool>, Driver<Bool>, Driver<Bool>) {
+    public var destructured: (Driver<PagingInfo<T>>, Driver<Error>, Driver<Bool>, Driver<Bool>, Driver<Bool>) {
         return (page, error, isLoading, isReloading, isLoadingMore)
     }
     
