@@ -10,16 +10,12 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-open class MultiActivityIndicator: SharedSequenceConvertibleType {
-    public typealias Element = Bool
-    
-    public typealias SharingStrategy = DriverSharingStrategy
-    
+open class MultiActivityIndicator: ActivityIndicator {
     private let _lock = NSRecursiveLock()
     private let _set = BehaviorRelay<Set<String>>(value: [])
     private let _loading: SharedSequence<SharingStrategy, Bool>
     
-    public init() {
+    override public init() {
         _loading = _set
             .asDriver()
             .map { !$0.isEmpty }
@@ -55,15 +51,5 @@ open class MultiActivityIndicator: SharedSequenceConvertibleType {
         set.remove(id)
         _set.accept(set)
         _lock.unlock()
-    }
-    
-    public func asSharedSequence() -> SharedSequence<SharingStrategy, Element> {
-        return _loading
-    }
-}
-
-extension ObservableConvertibleType {
-    public func trackActivity(_ activityIndicator: MultiActivityIndicator) -> Observable<Element> {
-        return activityIndicator.trackActivityOfObservable(self)
     }
 }

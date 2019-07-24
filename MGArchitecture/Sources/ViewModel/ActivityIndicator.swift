@@ -12,7 +12,6 @@ import RxCocoa
 
 open class ActivityIndicator: SharedSequenceConvertibleType {
     public typealias Element = Bool
-    
     public typealias SharingStrategy = DriverSharingStrategy
     
     private let _lock = NSRecursiveLock()
@@ -47,7 +46,7 @@ open class ActivityIndicator: SharedSequenceConvertibleType {
         _lock.unlock()
     }
     
-    public func asSharedSequence() -> SharedSequence<SharingStrategy, Element> {
+    open func asSharedSequence() -> SharedSequence<SharingStrategy, Element> {
         return _loading
     }
 }

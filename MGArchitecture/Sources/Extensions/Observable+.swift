@@ -33,8 +33,7 @@ extension ObservableType {
     }
     
     public func unwrap<T>() -> Observable<T> where Element == T? {
-        return self
-            .flatMap { Observable.from(optional: $0) }
+        return flatMap { Observable.from(optional: $0) }
     }
 }
 
@@ -49,20 +48,19 @@ extension SharedSequenceConvertibleType {
     }
     
     public func unwrap<T>() -> SharedSequence<SharingStrategy, T> where Element == T? {
-        return self
-            .flatMap { SharedSequence.from(optional: $0) }
+        return flatMap { SharedSequence.from(optional: $0) }
     }
 }
 
 extension ObservableType where Element == Bool {
     public func not() -> Observable<Bool> {
-        return self.map(!)
+        return map(!)
     }
 }
 
 extension SharedSequenceConvertibleType where Element == Bool {
     public func not() -> SharedSequence<SharingStrategy, Bool> {
-        return self.map(!)
+        return map(!)
     }
 }
 

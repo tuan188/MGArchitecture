@@ -25,7 +25,7 @@ extension AppViewModel: ViewModelType {
     func transform(_ input: Input) -> Output {
         let toMain = input.loadTrigger
             .do(onNext: { _ in
-                self.navigator.toMain()
+                self.navigator.toProductList()
             })
         
         return Output(toMain: toMain)

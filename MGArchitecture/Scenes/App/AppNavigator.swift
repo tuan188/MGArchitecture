@@ -10,6 +10,7 @@ import UIKit
 
 protocol AppNavigatorType {
     func toMain()
+    func toProductList()
 }
 
 struct AppNavigator: AppNavigatorType {
@@ -19,6 +20,13 @@ struct AppNavigator: AppNavigatorType {
     func toMain() {
         let nav = UINavigationController()
         let vc: MainViewController = assembler.resolve(navigationController: nav)
+        nav.viewControllers = [vc]
+        window.rootViewController = nav
+    }
+    
+    func toProductList() {
+        let nav = UINavigationController()
+        let vc: ProductListViewController = assembler.resolve(navigationController: nav)
         nav.viewControllers = [vc]
         window.rootViewController = nav
     }

@@ -9,9 +9,36 @@
 import RxSwift
 import RxCocoa
 
+public struct PaginationResult<T> {
+    var page: Driver<PagingInfo<T>>
+    var error: Driver<Error>
+    var isLoading: Driver<Bool>
+    var isReloading: Driver<Bool>
+    var isLoadingMore: Driver<Bool>
+    
+    var destructured: (Driver<PagingInfo<T>>, Driver<Error>, Driver<Bool>, Driver<Bool>, Driver<Bool>) {
+        return (page, error, isLoading, isReloading, isLoadingMore)
+    }
+    
+    public init(page: Driver<PagingInfo<T>>,
+                error: Driver<Error>,
+                isLoading: Driver<Bool>,
+                isReloading: Driver<Bool>,
+                isLoadingMore: Driver<Bool>) {
+        self.page = page
+        self.error = error
+        self.isLoading = isLoading
+        self.isReloading = isReloading
+        self.isLoadingMore = isLoadingMore
+    }
+}
+
 extension ViewModelType {
     
     public func configPagination<Item, Input, MappedItem>(
+        pageSubject: BehaviorRelay<PagingInfo<MappedItem>>,
+        pageActivityIndicator: PageActivityIndicator,
+        errorTracker: ErrorTracker,
         loadTrigger: Driver<Input>,
         getItems: @escaping (Input) -> Observable<PagingInfo<Item>>,
         reloadTrigger: Driver<Input>,
@@ -19,238 +46,206 @@ extension ViewModelType {
         loadMoreTrigger: Driver<Input>,
         loadMoreItems: @escaping (Input, Int) -> Observable<PagingInfo<Item>>,
         mapper: @escaping (Item) -> MappedItem)
-        ->
-        (page: BehaviorRelay<PagingInfo<MappedItem>>,
-        fetchItems: Driver<Void>,
-        error: Driver<Error>,
-        isLoading: Driver<Bool>,
-        isReloading: Driver<Bool>,
-        isLoadingMore: Driver<Bool>) {
+        -> PaginationResult<MappedItem> {
             
-            let pageSubject = BehaviorRelay<PagingInfo<MappedItem>>(value: PagingInfo<MappedItem>(page: 1, items: []))
-            let errorTracker = ErrorTracker()
-            let loadingActivityIndicator = ActivityIndicator()
-            let reloadingActivityIndicator = ActivityIndicator()
-            let loadingMoreActivityIndicator = ActivityIndicator()
+            let error = errorTracker.asDriver()
+            let isLoading = pageActivityIndicator.isLoading
+            let isReloading = pageActivityIndicator.isReloading
             
-            let loading = loadingActivityIndicator.asDriver()
-            let reloading = reloadingActivityIndicator.asDriver()
             let loadingMoreSubject = PublishSubject<Bool>()
-            let loadingMore = Driver.merge(loadingMoreActivityIndicator.asDriver(),
-                                           loadingMoreSubject.asDriverOnErrorJustComplete())
             
-            let loadingOrLoadingMore = Driver.merge(loading, reloading, loadingMore)
+            let isLoadingMore = Driver.merge(
+                pageActivityIndicator.isLoadingMore,
+                loadingMoreSubject.asDriverOnErrorJustComplete()
+            )
+            
+            let isLoadingOrLoadingMore = Driver.merge(isLoading, isReloading, isLoadingMore)
                 .startWith(false)
             
             let loadItems = loadTrigger
-                .withLatestFrom(loadingOrLoadingMore) {
-                    (arg: $0, loading: $1)
+                .withLatestFrom(isLoadingOrLoadingMore) {
+                    (input: $0, loading: $1)
                 }
                 .filter { !$0.loading }
-                .map { $0.arg }
-                .flatMapLatest { arg in
-                    getItems(arg)
+                .map { $0.input }
+                .flatMapLatest { input in
+                    getItems(input)
                         .trackError(errorTracker)
-                        .trackActivity(loadingActivityIndicator)
+                        .trackActivity(pageActivityIndicator.loadingIndicator)
                         .asDriverOnErrorJustComplete()
                 }
                 .do(onNext: { page in
-                    let newPage = PagingInfo<MappedItem>(page: page.page,
-                                                         items: page.items.map(mapper))
+                    let newPage = PagingInfo<MappedItem>(
+                        page: page.page,
+                        items: page.items.map(mapper)
+                    )
+                    
                     pageSubject.accept(newPage)
                 })
-                .mapToVoid()
             
             let reloadItems = reloadTrigger
-                .withLatestFrom(loadingOrLoadingMore) {
-                    (arg: $0, loading: $1)
+                .withLatestFrom(isLoadingOrLoadingMore) {
+                    (input: $0, loading: $1)
                 }
                 .filter { !$0.loading }
-                .map { $0.arg }
-                .flatMapLatest { arg in
-                    reloadItems(arg)
+                .map { $0.input }
+                .flatMapLatest { input in
+                    reloadItems(input)
                         .trackError(errorTracker)
-                        .trackActivity(reloadingActivityIndicator)
+                        .trackActivity(pageActivityIndicator.reloadingIndicator)
                         .asDriverOnErrorJustComplete()
                 }
                 .do(onNext: { page in
-                    let newPage = PagingInfo<MappedItem>(page: page.page,
-                                                         items: page.items.map(mapper))
+                    let newPage = PagingInfo<MappedItem>(
+                        page: page.page,
+                        items: page.items.map(mapper)
+                    )
+                    
                     pageSubject.accept(newPage)
                 })
-                .mapToVoid()
             
             let loadMoreItems = loadMoreTrigger
-                .withLatestFrom(loadingOrLoadingMore) {
-                    (arg: $0, loading: $1)
+                .withLatestFrom(isLoadingOrLoadingMore) {
+                    (input: $0, loading: $1)
                 }
                 .filter { !$0.loading }
-                .map { $0.arg }
+                .map { $0.input }
                 .do(onNext: { _ in
                     if pageSubject.value.items.isEmpty {
                         loadingMoreSubject.onNext(false)
                     }
                 })
                 .filter { _ in !pageSubject.value.items.isEmpty }
-                .flatMapLatest { arg -> Driver<PagingInfo<Item>> in
+                .flatMapLatest { input -> Driver<PagingInfo<Item>> in
                     let page = pageSubject.value.page
-                    return loadMoreItems(arg, page + 1)
+                    
+                    return loadMoreItems(input, page + 1)
                         .trackError(errorTracker)
-                        .trackActivity(loadingMoreActivityIndicator)
+                        .trackActivity(pageActivityIndicator.loadingMoreIndicator)
                         .asDriverOnErrorJustComplete()
                 }
                 .filter { !$0.items.isEmpty || !$0.hasMorePages }
                 .do(onNext: { page in
                     let currentPage = pageSubject.value
                     let items = currentPage.items + page.items.map(mapper)
-                    let newPage = PagingInfo<MappedItem>(page: page.page,
-                                                         items: items,
-                                                         hasMorePages: page.hasMorePages)
+                    
+                    let newPage = PagingInfo<MappedItem>(
+                        page: page.page,
+                        items: items,
+                        hasMorePages: page.hasMorePages
+                    )
+                    
                     pageSubject.accept(newPage)
                 })
-                .mapToVoid()
             
-            let fetchItems = Driver.merge(loadItems, reloadItems, loadMoreItems)
+            let page = Driver.merge(loadItems, reloadItems, loadMoreItems)
+                .withLatestFrom(pageSubject.asDriver())
             
-            return (pageSubject,
-                    fetchItems,
-                    errorTracker.asDriver(),
-                    loading,
-                    reloading,
-                    loadingMore)
+            return PaginationResult(
+                page: page,
+                error: error,
+                isLoading: isLoading,
+                isReloading: isReloading,
+                isLoadingMore: isLoadingMore
+            )
     }
     
-    public func configPagination<Item>(loadTrigger: Driver<Void>,
-                                       getItems: @escaping () -> Observable<PagingInfo<Item>>,
-                                       reloadTrigger: Driver<Void>,
-                                       reloadItems: @escaping () -> Observable<PagingInfo<Item>>,
-                                       loadMoreTrigger: Driver<Void>,
-                                       loadMoreItems: @escaping (Int) -> Observable<PagingInfo<Item>>)
-        ->
-        (page: BehaviorRelay<PagingInfo<Item>>,
-        fetchItems: Driver<Void>,
-        error: Driver<Error>,
-        isLoading: Driver<Bool>,
-        isReloading: Driver<Bool>,
-        isLoadingMore: Driver<Bool>) {
+    public func configPagination<Item, Input, MappedItem>(
+        pageSubject: BehaviorRelay<PagingInfo<MappedItem>>,
+        pageActivityIndicator: PageActivityIndicator,
+        errorTracker: ErrorTracker,
+        loadTrigger: Driver<Input>,
+        reloadTrigger: Driver<Input>,
+        loadMoreTrigger: Driver<Input>,
+        getItems: @escaping (Input, Int) -> Observable<PagingInfo<Item>>,
+        mapper: @escaping (Item) -> MappedItem)
+        -> PaginationResult<MappedItem> {
             
             return configPagination(
+                pageSubject: pageSubject,
+                pageActivityIndicator: pageActivityIndicator,
+                errorTracker: errorTracker,
                 loadTrigger: loadTrigger,
-                getItems: { _ in
-                    return getItems()
+                getItems: { input in
+                    return getItems(input, 1)
                 },
                 reloadTrigger: reloadTrigger,
-                reloadItems: { _ in
-                    return reloadItems()
+                reloadItems: { input in
+                    return getItems(input, 1)
                 },
                 loadMoreTrigger: loadMoreTrigger,
-                loadMoreItems: { _, page in
-                    return loadMoreItems(page)
-                },
-                mapper: { $0 })
+                loadMoreItems: getItems,
+                mapper: mapper
+            )
     }
     
-    public func configPagination<Item>(loadTrigger: Driver<Void>,
-                                       reloadTrigger: Driver<Void>,
-                                       getItems: @escaping () -> Observable<PagingInfo<Item>>,
-                                       loadMoreTrigger: Driver<Void>,
-                                       loadMoreItems: @escaping (Int) -> Observable<PagingInfo<Item>>)
-        ->
-        (page: BehaviorRelay<PagingInfo<Item>>,
-        fetchItems: Driver<Void>,
-        error: Driver<Error>,
-        isLoading: Driver<Bool>,
-        isReloading: Driver<Bool>,
-        isLoadingMore: Driver<Bool>) {
+    public func configPagination<Item, Input>(
+        pageActivityIndicator: PageActivityIndicator,
+        errorTracker: ErrorTracker,
+        loadTrigger: Driver<Input>,
+        reloadTrigger: Driver<Input>,
+        loadMoreTrigger: Driver<Input>,
+        getItems: @escaping (Input, Int) -> Observable<PagingInfo<Item>>)
+        -> PaginationResult<Item> {
+            
+            let pageSubject = BehaviorRelay<PagingInfo<Item>>(
+                value: PagingInfo<Item>(page: 1, items: [])
+            )
             
             return configPagination(
+                pageSubject: pageSubject,
+                pageActivityIndicator: pageActivityIndicator,
+                errorTracker: errorTracker,
                 loadTrigger: loadTrigger,
-                getItems: { _ in
-                    return getItems()
+                getItems: { input in
+                    return getItems(input, 1)
                 },
                 reloadTrigger: reloadTrigger,
-                reloadItems: { _ in
-                    return getItems()
+                reloadItems: { input in
+                    return getItems(input, 1)
                 },
                 loadMoreTrigger: loadMoreTrigger,
-                loadMoreItems: { _, page in
-                    return loadMoreItems(page)
-                },
-                mapper: { $0 })
-    }
-    
-    public func configPagination<Item>(loadTrigger: Driver<Void>,
-                                       getItems: @escaping () -> Observable<PagingInfo<Item>>,
-                                       reloadTrigger: Driver<Void>,
-                                       reloadItems: @escaping () -> Observable<PagingInfo<Item>>)
-        ->
-        (page: BehaviorRelay<PagingInfo<Item>>,
-        fetchItems: Driver<Void>,
-        error: Driver<Error>,
-        isLoading: Driver<Bool>,
-        isReloading: Driver<Bool>) {
-            
-            let result = configPagination(
-                loadTrigger: loadTrigger,
-                getItems: { _ in
-                    return getItems()
-                },
-                reloadTrigger: reloadTrigger,
-                reloadItems: { _ in
-                    return reloadItems()
-                },
-                loadMoreTrigger: Driver.empty(),
-                loadMoreItems: { _, _ in
-                    return Observable.empty()
+                loadMoreItems: { input, page in
+                    return getItems(input, page)
                 },
                 mapper: { $0 }
             )
-            
-            return (result.page, result.fetchItems, result.error, result.isLoading, result.isReloading)
     }
     
-    public func configPagination<Item>(loadTrigger: Driver<Void>,
-                                       reloadTrigger: Driver<Void>,
-                                       getItems: @escaping () -> Observable<PagingInfo<Item>>)
-        ->
-        (page: BehaviorRelay<PagingInfo<Item>>,
-        fetchItems: Driver<Void>,
-        error: Driver<Error>,
-        isLoading: Driver<Bool>,
-        isReloading: Driver<Bool>) {
-            
-            let result = configPagination(
-                loadTrigger: loadTrigger,
-                getItems: { _ in
-                    return getItems()
-                },
-                reloadTrigger: reloadTrigger,
-                reloadItems: { _ in
-                    return getItems()
-                },
-                loadMoreTrigger: Driver.empty(),
-                loadMoreItems: { _, _ in
-                    return Observable.empty()
-                },
-                mapper: { $0 }
-            )
-            
-            return (result.page, result.fetchItems, result.error, result.isLoading, result.isReloading)
-    }
-    
-    public func configPagination<Item>(loadTrigger: Driver<Void>,
-                                       reloadTrigger: Driver<Void>,
-                                       loadMoreTrigger: Driver<Void>,
-                                       getItems: @escaping (Int) -> Observable<PagingInfo<Item>>)
-        ->
-        (page: BehaviorRelay<PagingInfo<Item>>,
-        fetchItems: Driver<Void>,
-        error: Driver<Error>,
-        isLoading: Driver<Bool>,
-        isReloading: Driver<Bool>,
-        isLoadingMore: Driver<Bool>) {
+    public func configPagination<Item, Input>(
+        loadTrigger: Driver<Input>,
+        reloadTrigger: Driver<Input>,
+        loadMoreTrigger: Driver<Input>,
+        getItems: @escaping (Input, Int) -> Observable<PagingInfo<Item>>)
+        -> PaginationResult<Item> {
             
             return configPagination(
+                pageActivityIndicator: PageActivityIndicator(),
+                errorTracker: ErrorTracker(),
+                loadTrigger: loadTrigger,
+                reloadTrigger: reloadTrigger,
+                loadMoreTrigger: loadMoreTrigger,
+                getItems: getItems
+            )
+    }
+    
+    public func configPagination<Item>(
+        pageActivityIndicator: PageActivityIndicator,
+        errorTracker: ErrorTracker,
+        loadTrigger: Driver<Void>,
+        reloadTrigger: Driver<Void>,
+        loadMoreTrigger: Driver<Void>,
+        getItems: @escaping (Int) -> Observable<PagingInfo<Item>>)
+        -> PaginationResult<Item> {
+            
+            let pageSubject = BehaviorRelay<PagingInfo<Item>>(
+                value: PagingInfo<Item>(page: 1, items: [])
+            )
+            
+            return configPagination(
+                pageSubject: pageSubject,
+                pageActivityIndicator: pageActivityIndicator,
+                errorTracker: errorTracker,
                 loadTrigger: loadTrigger,
                 getItems: { _ in
                     return getItems(1)
@@ -264,6 +259,70 @@ extension ViewModelType {
                     return getItems(page)
                 },
                 mapper: { $0 }
+            )
+    }
+    
+    public func configPagination<Item>(
+        loadTrigger: Driver<Void>,
+        reloadTrigger: Driver<Void>,
+        loadMoreTrigger: Driver<Void>,
+        getItems: @escaping (Int) -> Observable<PagingInfo<Item>>)
+        -> PaginationResult<Item> {
+            
+            return configPagination(
+                pageActivityIndicator: PageActivityIndicator(),
+                errorTracker: ErrorTracker(),
+                loadTrigger: loadTrigger,
+                reloadTrigger: reloadTrigger,
+                loadMoreTrigger: loadMoreTrigger,
+                getItems: getItems
+            )
+    }
+    
+    public func configPagination<Item>(
+        pageActivityIndicator: PageActivityIndicator,
+        errorTracker: ErrorTracker,
+        loadTrigger: Driver<Void>,
+        reloadTrigger: Driver<Void>,
+        getItems: @escaping () -> Observable<PagingInfo<Item>>)
+        -> PaginationResult<Item> {
+            
+            let pageSubject = BehaviorRelay<PagingInfo<Item>>(
+                value: PagingInfo<Item>(page: 1, items: [])
+            )
+            
+            return configPagination(
+                pageSubject: pageSubject,
+                pageActivityIndicator: pageActivityIndicator,
+                errorTracker: errorTracker,
+                loadTrigger: loadTrigger,
+                getItems: { _ in
+                    return getItems()
+                },
+                reloadTrigger: reloadTrigger,
+                reloadItems: { _ in
+                    return getItems()
+                },
+                loadMoreTrigger: Driver.empty(),
+                loadMoreItems: { _, _ in
+                    return Observable.empty()
+                },
+                mapper: { $0 }
+            )
+    }
+    
+    public func configPagination<Item>(
+        loadTrigger: Driver<Void>,
+        reloadTrigger: Driver<Void>,
+        getItems: @escaping () -> Observable<PagingInfo<Item>>)
+        -> PaginationResult<Item> {
+            
+            return configPagination(
+                pageActivityIndicator: PageActivityIndicator(),
+                errorTracker: ErrorTracker(),
+                loadTrigger: loadTrigger,
+                reloadTrigger: reloadTrigger,
+                getItems: getItems
             )
     }
 }

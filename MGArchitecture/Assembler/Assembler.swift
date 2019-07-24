@@ -8,6 +8,7 @@
 
 protocol Assembler: class,
     MainAssembler,
+    ProductListAssembler,
     AppAssembler {
     
 }
