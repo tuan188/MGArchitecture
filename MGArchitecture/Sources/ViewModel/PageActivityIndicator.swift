@@ -42,5 +42,9 @@ extension PageActivityIndicator {
     public var isLoadingMore: Driver<Bool> {
         return loadingMoreIndicator.asDriver()
     }
+    
+    public var destructured: (Driver<Bool>, Driver<Bool>, Driver<Bool>) {
+        return (isLoading, isReloading, isLoadingMore)
+    }
 }
 

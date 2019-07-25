@@ -34,7 +34,6 @@ public struct PaginationResult<T> {
 }
 
 extension ViewModelType {
-    
     public func configPagination<Item, Input, MappedItem>(
         pageSubject: BehaviorRelay<PagingInfo<MappedItem>>,
         pageActivityIndicator: PageActivityIndicator,
@@ -62,38 +61,29 @@ extension ViewModelType {
             let isLoadingOrLoadingMore = Driver.merge(isLoading, isReloading, isLoadingMore)
                 .startWith(false)
             
-            let loadItems = loadTrigger
+            let loadItems = Driver<ScreenLoadingType<Input>>
+                .merge(
+                    loadTrigger.map { ScreenLoadingType.loading($0) },
+                    reloadTrigger.map { ScreenLoadingType.reloading($0) }
+                )
                 .withLatestFrom(isLoadingOrLoadingMore) {
-                    (input: $0, loading: $1)
+                    (triggerType: $0, loading: $1)
                 }
                 .filter { !$0.loading }
-                .map { $0.input }
-                .flatMapLatest { input in
-                    getItems(input)
-                        .trackError(errorTracker)
-                        .trackActivity(pageActivityIndicator.loadingIndicator)
-                        .asDriverOnErrorJustComplete()
-                }
-                .do(onNext: { page in
-                    let newPage = PagingInfo<MappedItem>(
-                        page: page.page,
-                        items: page.items.map(mapper)
-                    )
-                    
-                    pageSubject.accept(newPage)
-                })
-            
-            let reloadItems = reloadTrigger
-                .withLatestFrom(isLoadingOrLoadingMore) {
-                    (input: $0, loading: $1)
-                }
-                .filter { !$0.loading }
-                .map { $0.input }
-                .flatMapLatest { input in
-                    reloadItems(input)
-                        .trackError(errorTracker)
-                        .trackActivity(pageActivityIndicator.reloadingIndicator)
-                        .asDriverOnErrorJustComplete()
+                .map { $0.triggerType }
+                .flatMapLatest { triggerType -> Driver<PagingInfo<Item>> in
+                    switch triggerType {
+                    case .loading(let input):
+                        return getItems(input)
+                            .trackError(errorTracker)
+                            .trackActivity(pageActivityIndicator.loadingIndicator)
+                            .asDriverOnErrorJustComplete()
+                    case .reloading(let input):
+                        return reloadItems(input)
+                            .trackError(errorTracker)
+                            .trackActivity(pageActivityIndicator.reloadingIndicator)
+                            .asDriverOnErrorJustComplete()
+                    }
                 }
                 .do(onNext: { page in
                     let newPage = PagingInfo<MappedItem>(
@@ -138,7 +128,7 @@ extension ViewModelType {
                     pageSubject.accept(newPage)
                 })
             
-            let page = Driver.merge(loadItems, reloadItems, loadMoreItems)
+            let page = Driver.merge(loadItems, loadMoreItems)
                 .withLatestFrom(pageSubject.asDriver())
             
             return PaginationResult(
@@ -205,9 +195,7 @@ extension ViewModelType {
                     return getItems(input, 1)
                 },
                 loadMoreTrigger: loadMoreTrigger,
-                loadMoreItems: { input, page in
-                    return getItems(input, page)
-                },
+                loadMoreItems: getItems,
                 mapper: { $0 }
             )
     }
@@ -219,13 +207,25 @@ extension ViewModelType {
         getItems: @escaping (Input, Int) -> Observable<PagingInfo<Item>>)
         -> PaginationResult<Item> {
             
+            let pageSubject = BehaviorRelay<PagingInfo<Item>>(
+                value: PagingInfo<Item>(page: 1, items: [])
+            )
+            
             return configPagination(
+                pageSubject: pageSubject,
                 pageActivityIndicator: PageActivityIndicator(),
                 errorTracker: ErrorTracker(),
                 loadTrigger: loadTrigger,
+                getItems: { input in
+                    return getItems(input, 1)
+                },
                 reloadTrigger: reloadTrigger,
+                reloadItems: { input in
+                    return getItems(input, 1)
+                },
                 loadMoreTrigger: loadMoreTrigger,
-                getItems: getItems
+                loadMoreItems: getItems,
+                mapper: { $0 }
             )
     }
     
@@ -269,13 +269,27 @@ extension ViewModelType {
         getItems: @escaping (Int) -> Observable<PagingInfo<Item>>)
         -> PaginationResult<Item> {
             
+            let pageSubject = BehaviorRelay<PagingInfo<Item>>(
+                value: PagingInfo<Item>(page: 1, items: [])
+            )
+            
             return configPagination(
+                pageSubject: pageSubject,
                 pageActivityIndicator: PageActivityIndicator(),
                 errorTracker: ErrorTracker(),
                 loadTrigger: loadTrigger,
+                getItems: { _ in
+                    return getItems(1)
+                },
                 reloadTrigger: reloadTrigger,
+                reloadItems: { _ in
+                    return getItems(1)
+                },
                 loadMoreTrigger: loadMoreTrigger,
-                getItems: getItems
+                loadMoreItems: { _, page in
+                    return getItems(page)
+                },
+                mapper: { $0 }
             )
     }
     
@@ -317,12 +331,27 @@ extension ViewModelType {
         getItems: @escaping () -> Observable<PagingInfo<Item>>)
         -> PaginationResult<Item> {
             
+            let pageSubject = BehaviorRelay<PagingInfo<Item>>(
+                value: PagingInfo<Item>(page: 1, items: [])
+            )
+            
             return configPagination(
+                pageSubject: pageSubject,
                 pageActivityIndicator: PageActivityIndicator(),
                 errorTracker: ErrorTracker(),
                 loadTrigger: loadTrigger,
+                getItems: { _ in
+                    return getItems()
+                },
                 reloadTrigger: reloadTrigger,
-                getItems: getItems
+                reloadItems: { _ in
+                    return getItems()
+                },
+                loadMoreTrigger: Driver.empty(),
+                loadMoreItems: { _, _ in
+                    return Observable.empty()
+                },
+                mapper: { $0 }
             )
     }
 }
