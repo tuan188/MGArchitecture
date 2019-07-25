@@ -98,7 +98,8 @@ extension ViewModelType {
                 getItems: getItems,
                 reloadTrigger: reloadTrigger,
                 reloadItems: getItems,
-                mapper: mapper)
+                mapper: mapper
+            )
     }
     
     public func getList<Item, Input, MappedItem>(
@@ -115,7 +116,8 @@ extension ViewModelType {
                 getItems: getItems,
                 reloadTrigger: reloadTrigger,
                 reloadItems: getItems,
-                mapper: mapper)
+                mapper: mapper
+            )
     }
     
     public func getList<Item, Input>(
@@ -133,7 +135,8 @@ extension ViewModelType {
                 getItems: getItems,
                 reloadTrigger: reloadTrigger,
                 reloadItems: getItems,
-                mapper: { $0 })
+                mapper: { $0 }
+            )
     }
     
     public func getList<Item, Input>(
@@ -149,49 +152,8 @@ extension ViewModelType {
                 getItems: getItems,
                 reloadTrigger: reloadTrigger,
                 reloadItems: getItems,
-                mapper: { $0 })
-    }
-    
-    public func getList<Item>(
-        pageActivityIndicator: PageActivityIndicator,
-        errorTracker: ErrorTracker,
-        loadTrigger: Driver<Void>,
-        reloadTrigger: Driver<Void>,
-        getItems: @escaping () -> Observable<[Item]>)
-        -> GetListResult<Item> {
-            
-            return getList(
-                pageActivityIndicator: pageActivityIndicator,
-                errorTracker: errorTracker,
-                loadTrigger: loadTrigger,
-                getItems: { _ in
-                    return getItems()
-                },
-                reloadTrigger: reloadTrigger,
-                reloadItems: { _ in
-                    return getItems()
-                },
-                mapper: { $0 })
-    }
-    
-    public func getList<Item>(
-        loadTrigger: Driver<Void>,
-        reloadTrigger: Driver<Void>,
-        getItems: @escaping () -> Observable<[Item]>)
-        -> GetListResult<Item> {
-            
-            return getList(
-                pageActivityIndicator: PageActivityIndicator(),
-                errorTracker: ErrorTracker(),
-                loadTrigger: loadTrigger,
-                getItems: { _ in
-                    return getItems()
-                },
-                reloadTrigger: reloadTrigger,
-                reloadItems: { _ in
-                    return getItems()
-                },
-                mapper: { $0 })
+                mapper: { $0 }
+            )
     }
 }
 
