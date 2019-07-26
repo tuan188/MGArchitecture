@@ -11,12 +11,12 @@ import RxCocoa
 
 extension ObservableType where Element: Sequence {
     
-    typealias T = Element.Iterator.Element
+    public typealias T = Element.Iterator.Element
     
     /// Create an observable which is an Array of the projected values
     /// the operator produce an array of the same size than the original sequence
     /// and will generate new array every time a new item is emitted
-    func sync<V>(project: @escaping (T) -> Observable<V>) -> Observable<[V]> {
+    public func sync<V>(project: @escaping (T) -> Observable<V>) -> Observable<[V]> {
         typealias Pair = (value: V, index: Int) // swiftlint:disable:this nesting
         return self
             .flatMapLatest { (seq) -> Observable<[V]> in
