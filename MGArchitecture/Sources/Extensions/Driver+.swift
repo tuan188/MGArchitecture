@@ -28,5 +28,16 @@ extension SharedSequenceConvertibleType where Element == Bool {
     public func not() -> SharedSequence<SharingStrategy, Bool> {
         return map(!)
     }
+    
+    public static func or(_ sources: SharedSequence<DriverSharingStrategy, Bool>...)
+        -> SharedSequence<DriverSharingStrategy, Bool> {
+            return Driver.combineLatest(sources)
+                .map { $0.reduce(false) { $0 || $1 } }
+    }
+    
+    public static func and(_ sources: SharedSequence<DriverSharingStrategy, Bool>...)
+        -> SharedSequence<DriverSharingStrategy, Bool> {
+            return Driver.combineLatest(sources)
+                .map { $0.reduce(true) { $0 && $1 } }
+    }
 }
-

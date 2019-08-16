@@ -40,6 +40,18 @@ extension ObservableType where Element == Bool {
     public func not() -> Observable<Bool> {
         return map(!)
     }
+    
+    public static func or(_ sources: Observable<Bool>...)
+        -> Observable<Bool> {
+            return Observable.combineLatest(sources)
+                .map { $0.reduce(false) { $0 || $1 } }
+    }
+    
+    public static func and(_ sources: Observable<Bool>...)
+        -> Observable<Bool> {
+            return Observable.combineLatest(sources)
+                .map { $0.reduce(true) { $0 && $1 } }
+    }
 }
 
 private func getThreadName() -> String {
