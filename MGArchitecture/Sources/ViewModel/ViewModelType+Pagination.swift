@@ -88,7 +88,8 @@ extension ViewModelType {
                 .do(onNext: { page in
                     let newPage = PagingInfo<MappedItem>(
                         page: page.page,
-                        items: page.items.map(mapper)
+                        items: page.items.map(mapper),
+                        hasMorePages: page.hasMorePages
                     )
                     
                     pageSubject.accept(newPage)
@@ -178,9 +179,7 @@ extension ViewModelType {
         getItems: @escaping (Input, Int) -> Observable<PagingInfo<Item>>)
         -> PaginationResult<Item> {
             
-            let pageSubject = BehaviorRelay<PagingInfo<Item>>(
-                value: PagingInfo<Item>(page: 1, items: [])
-            )
+            let pageSubject = BehaviorRelay<PagingInfo<Item>>(value: PagingInfo<Item>())
             
             return configPagination(
                 pageSubject: pageSubject,
@@ -207,9 +206,7 @@ extension ViewModelType {
         getItems: @escaping (Input, Int) -> Observable<PagingInfo<Item>>)
         -> PaginationResult<Item> {
             
-            let pageSubject = BehaviorRelay<PagingInfo<Item>>(
-                value: PagingInfo<Item>(page: 1, items: [])
-            )
+            let pageSubject = BehaviorRelay<PagingInfo<Item>>(value: PagingInfo<Item>())
             
             return configPagination(
                 pageSubject: pageSubject,
@@ -238,9 +235,7 @@ extension ViewModelType {
         getItems: @escaping (Int) -> Observable<PagingInfo<Item>>)
         -> PaginationResult<Item> {
             
-            let pageSubject = BehaviorRelay<PagingInfo<Item>>(
-                value: PagingInfo<Item>(page: 1, items: [])
-            )
+            let pageSubject = BehaviorRelay<PagingInfo<Item>>(value: PagingInfo<Item>())
             
             return configPagination(
                 pageSubject: pageSubject,
@@ -269,9 +264,7 @@ extension ViewModelType {
         getItems: @escaping (Int) -> Observable<PagingInfo<Item>>)
         -> PaginationResult<Item> {
             
-            let pageSubject = BehaviorRelay<PagingInfo<Item>>(
-                value: PagingInfo<Item>(page: 1, items: [])
-            )
+            let pageSubject = BehaviorRelay<PagingInfo<Item>>(value: PagingInfo<Item>())
             
             return configPagination(
                 pageSubject: pageSubject,
@@ -301,9 +294,7 @@ extension ViewModelType {
         getItems: @escaping () -> Observable<PagingInfo<Item>>)
         -> PaginationResult<Item> {
             
-            let pageSubject = BehaviorRelay<PagingInfo<Item>>(
-                value: PagingInfo<Item>(page: 1, items: [])
-            )
+            let pageSubject = BehaviorRelay<PagingInfo<Item>>(value: PagingInfo<Item>())
             
             return configPagination(
                 pageSubject: pageSubject,
@@ -331,9 +322,7 @@ extension ViewModelType {
         getItems: @escaping () -> Observable<PagingInfo<Item>>)
         -> PaginationResult<Item> {
             
-            let pageSubject = BehaviorRelay<PagingInfo<Item>>(
-                value: PagingInfo<Item>(page: 1, items: [])
-            )
+            let pageSubject = BehaviorRelay<PagingInfo<Item>>(value: PagingInfo<Item>())
             
             return configPagination(
                 pageSubject: pageSubject,

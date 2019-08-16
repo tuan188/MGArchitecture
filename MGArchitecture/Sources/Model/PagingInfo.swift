@@ -20,4 +20,8 @@ public struct PagingInfo<T> {
     public init(page: Int, items: [T]) {
         self.init(page: page, items: items, hasMorePages: true)
     }
+    
+    public init() {
+        self.init(page: 1, items: [], hasMorePages: true)
+    }
 }
