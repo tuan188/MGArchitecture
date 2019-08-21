@@ -34,13 +34,13 @@ extension ProductListViewModel: ViewModelType {
     }
 
     func transform(_ input: Input) -> Output {
-        let paginationResult = configPagination(
+        let getPageResult = getPage(
             loadTrigger: input.loadTrigger,
             reloadTrigger: input.reloadTrigger,
             loadMoreTrigger: input.loadMoreTrigger,
             getItems: useCase.getProductList)
         
-        let (page, error, isLoading, isReloading, isLoadingMore) = paginationResult.destructured
+        let (page, error, isLoading, isReloading, isLoadingMore) = getPageResult.destructured
 
         let productList = page
             .map { $0.items.map { $0 } }
@@ -62,5 +62,152 @@ extension ProductListViewModel: ViewModelType {
             selectedProduct: selectedProduct,
             isEmpty: isEmpty
         )
+    }
+}
+
+// MARK: - Test
+extension ProductListViewModel {
+    func testGetPage(_ input: Input) {
+        _ = getPage(
+            pageSubject: BehaviorRelay<PagingInfo<Product>>(value: PagingInfo<Product>()),
+            pageActivityIndicator: PageActivityIndicator(),
+            errorTracker: ErrorTracker(),
+            loadTrigger: input.loadTrigger.map { _ in "query" },
+            getItems: { input in
+                return self.useCase.getProductList(query: input, page: 1)
+            },
+            reloadTrigger: input.reloadTrigger.map { _ in "query" },
+            reloadItems: { input in
+                return self.useCase.getProductList(query: input, page: 1)
+            },
+            loadMoreTrigger: input.loadMoreTrigger.map { _ in "query" },
+            loadMoreItems: useCase.getProductList(query:page:),
+            mapper: { $0 }
+        )
+        
+        _ = getPage(
+            pageSubject: BehaviorRelay<PagingInfo<Product>>(value: PagingInfo<Product>()),
+            pageActivityIndicator: PageActivityIndicator(),
+            errorTracker: ErrorTracker(),
+            loadTrigger: input.loadTrigger.map { _ in "query" },
+            reloadTrigger: input.reloadTrigger.map { _ in "query" },
+            loadMoreTrigger: input.loadMoreTrigger.map { _ in "query" },
+            getItems: useCase.getProductList(query:page:),
+            mapper: { $0 })
+        
+        _ = getPage(
+            pageActivityIndicator: PageActivityIndicator(),
+            errorTracker: ErrorTracker(),
+            loadTrigger: input.loadTrigger.map { _ in "query" },
+            reloadTrigger: input.reloadTrigger.map { _ in "query" },
+            loadMoreTrigger: input.loadMoreTrigger.map { _ in "query" },
+            getItems: useCase.getProductList(query:page:))
+        
+        _ = getPage(
+            loadTrigger: input.loadTrigger.map { _ in "query" },
+            reloadTrigger: input.reloadTrigger.map { _ in "query" },
+            loadMoreTrigger: input.loadMoreTrigger.map { _ in "query" },
+            getItems: useCase.getProductList(query:page:))
+        
+        _ = getPage(
+            pageActivityIndicator: PageActivityIndicator(),
+            errorTracker: ErrorTracker(),
+            loadTrigger: input.loadTrigger,
+            reloadTrigger: input.reloadTrigger,
+            loadMoreTrigger: input.loadMoreTrigger,
+            getItems: useCase.getProductList(page:))
+        
+        _ = getPage(
+            loadTrigger: input.loadTrigger,
+            reloadTrigger: input.reloadTrigger,
+            loadMoreTrigger: input.loadMoreTrigger,
+            getItems: useCase.getProductList(page:))
+        
+        _ = getPage(
+            pageActivityIndicator: PageActivityIndicator(),
+            errorTracker: ErrorTracker(),
+            loadTrigger: input.loadTrigger,
+            reloadTrigger: input.reloadTrigger,
+            getItems: {
+                self.useCase.getProductList(page: 1)
+            })
+        
+        _ = getPage(
+            loadTrigger: input.loadTrigger,
+            reloadTrigger: input.reloadTrigger,
+            getItems: {
+                self.useCase.getProductList(page: 1)
+            })
+    }
+    
+    func testGetList(_ input: Input) {
+        _ = getList(
+            pageActivityIndicator: PageActivityIndicator(),
+            errorTracker: ErrorTracker(),
+            loadTrigger: input.loadTrigger.map { _ in "query" },
+            getItems: { _ in
+                self.useCase.getProductList()
+            },
+            reloadTrigger: input.reloadTrigger.map { _ in "query" },
+            reloadItems: { _ in
+                self.useCase.getProductList()
+            },
+            mapper: { $0 })
+        
+        _ = getList(
+            pageActivityIndicator: PageActivityIndicator(),
+            errorTracker: ErrorTracker(),
+            loadTrigger: input.loadTrigger.map { _ in "query" },
+            reloadTrigger: input.reloadTrigger.map { _ in "query" },
+            getItems: { _ in
+                self.useCase.getProductList()
+            },
+            mapper: { $0 })
+        
+        _ = getList(
+            loadTrigger: input.loadTrigger.map { _ in "query" },
+            reloadTrigger: input.reloadTrigger.map { _ in "query" },
+            getItems: { _ in
+                self.useCase.getProductList()
+            },
+            mapper: { $0 })
+        
+        _ = getList(
+            pageActivityIndicator: PageActivityIndicator(),
+            errorTracker: ErrorTracker(),
+            loadTrigger: input.loadTrigger.map { _ in "query" },
+            reloadTrigger: input.reloadTrigger.map { _ in "query" },
+            getItems: { _ in
+                self.useCase.getProductList()
+            })
+        
+        _ = getList(
+            loadTrigger: input.loadTrigger.map { _ in "query" },
+            reloadTrigger: input.reloadTrigger.map { _ in "query" },
+            getItems: { _ in
+                self.useCase.getProductList()
+            })
+    }
+    
+    func testGetItem(_ input: Input) {
+        _ = getItem(
+            pageActivityIndicator: PageActivityIndicator(),
+            errorTracker: ErrorTracker(),
+            loadTrigger: input.loadTrigger.map { _ in "query" },
+            getItem: useCase.getProduct(query:),
+            reloadTrigger: input.reloadTrigger.map { _ in "query" },
+            reloadItem: useCase.getProduct(query:))
+        
+        _ = getItem(
+            pageActivityIndicator: PageActivityIndicator(),
+            errorTracker: ErrorTracker(),
+            loadTrigger: input.loadTrigger.map { _ in "query" },
+            reloadTrigger: input.reloadTrigger.map { _ in "query" },
+            getItem: useCase.getProduct(query:))
+        
+        _ = getItem(
+            loadTrigger: input.loadTrigger.map { _ in "query" },
+            reloadTrigger: input.reloadTrigger.map { _ in "query" },
+            getItem: useCase.getProduct(query:))
     }
 }

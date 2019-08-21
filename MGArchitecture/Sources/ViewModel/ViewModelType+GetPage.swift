@@ -1,5 +1,5 @@
 //
-//  ViewModelType+Pagination.swift
+//  ViewModelType+GetPage.swift
 //  MGArchitecture
 //
 //  Created by Tuan Truong on 6/17/19.
@@ -9,7 +9,7 @@
 import RxSwift
 import RxCocoa
 
-public struct PaginationResult<T> {
+public struct GetPageResult<T> {
     public var page: Driver<PagingInfo<T>>
     public var error: Driver<Error>
     public var isLoading: Driver<Bool>
@@ -34,7 +34,7 @@ public struct PaginationResult<T> {
 }
 
 extension ViewModelType {
-    public func configPagination<Item, Input, MappedItem>(
+    public func getPage<Item, Input, MappedItem>(
         pageSubject: BehaviorRelay<PagingInfo<MappedItem>>,
         pageActivityIndicator: PageActivityIndicator,
         errorTracker: ErrorTracker,
@@ -45,7 +45,7 @@ extension ViewModelType {
         loadMoreTrigger: Driver<Input>,
         loadMoreItems: @escaping (Input, Int) -> Observable<PagingInfo<Item>>,
         mapper: @escaping (Item) -> MappedItem)
-        -> PaginationResult<MappedItem> {
+        -> GetPageResult<MappedItem> {
             
             let error = errorTracker.asDriver()
             let isLoading = pageActivityIndicator.isLoading
@@ -132,7 +132,7 @@ extension ViewModelType {
             let page = Driver.merge(loadItems, loadMoreItems)
                 .withLatestFrom(pageSubject.asDriver())
             
-            return PaginationResult(
+            return GetPageResult(
                 page: page,
                 error: error,
                 isLoading: isLoading,
@@ -141,7 +141,7 @@ extension ViewModelType {
             )
     }
     
-    public func configPagination<Item, Input, MappedItem>(
+    public func getPage<Item, Input, MappedItem>(
         pageSubject: BehaviorRelay<PagingInfo<MappedItem>>,
         pageActivityIndicator: PageActivityIndicator,
         errorTracker: ErrorTracker,
@@ -150,9 +150,9 @@ extension ViewModelType {
         loadMoreTrigger: Driver<Input>,
         getItems: @escaping (Input, Int) -> Observable<PagingInfo<Item>>,
         mapper: @escaping (Item) -> MappedItem)
-        -> PaginationResult<MappedItem> {
+        -> GetPageResult<MappedItem> {
             
-            return configPagination(
+            return getPage(
                 pageSubject: pageSubject,
                 pageActivityIndicator: pageActivityIndicator,
                 errorTracker: errorTracker,
@@ -170,18 +170,18 @@ extension ViewModelType {
             )
     }
     
-    public func configPagination<Item, Input>(
+    public func getPage<Item, Input>(
         pageActivityIndicator: PageActivityIndicator,
         errorTracker: ErrorTracker,
         loadTrigger: Driver<Input>,
         reloadTrigger: Driver<Input>,
         loadMoreTrigger: Driver<Input>,
         getItems: @escaping (Input, Int) -> Observable<PagingInfo<Item>>)
-        -> PaginationResult<Item> {
+        -> GetPageResult<Item> {
             
             let pageSubject = BehaviorRelay<PagingInfo<Item>>(value: PagingInfo<Item>())
             
-            return configPagination(
+            return getPage(
                 pageSubject: pageSubject,
                 pageActivityIndicator: pageActivityIndicator,
                 errorTracker: errorTracker,
@@ -199,16 +199,16 @@ extension ViewModelType {
             )
     }
     
-    public func configPagination<Item, Input>(
+    public func getPage<Item, Input>(
         loadTrigger: Driver<Input>,
         reloadTrigger: Driver<Input>,
         loadMoreTrigger: Driver<Input>,
         getItems: @escaping (Input, Int) -> Observable<PagingInfo<Item>>)
-        -> PaginationResult<Item> {
+        -> GetPageResult<Item> {
             
             let pageSubject = BehaviorRelay<PagingInfo<Item>>(value: PagingInfo<Item>())
             
-            return configPagination(
+            return getPage(
                 pageSubject: pageSubject,
                 pageActivityIndicator: PageActivityIndicator(),
                 errorTracker: ErrorTracker(),
@@ -226,18 +226,18 @@ extension ViewModelType {
             )
     }
     
-    public func configPagination<Item>(
+    public func getPage<Item>(
         pageActivityIndicator: PageActivityIndicator,
         errorTracker: ErrorTracker,
         loadTrigger: Driver<Void>,
         reloadTrigger: Driver<Void>,
         loadMoreTrigger: Driver<Void>,
         getItems: @escaping (Int) -> Observable<PagingInfo<Item>>)
-        -> PaginationResult<Item> {
+        -> GetPageResult<Item> {
             
             let pageSubject = BehaviorRelay<PagingInfo<Item>>(value: PagingInfo<Item>())
             
-            return configPagination(
+            return getPage(
                 pageSubject: pageSubject,
                 pageActivityIndicator: pageActivityIndicator,
                 errorTracker: errorTracker,
@@ -257,16 +257,16 @@ extension ViewModelType {
             )
     }
     
-    public func configPagination<Item>(
+    public func getPage<Item>(
         loadTrigger: Driver<Void>,
         reloadTrigger: Driver<Void>,
         loadMoreTrigger: Driver<Void>,
         getItems: @escaping (Int) -> Observable<PagingInfo<Item>>)
-        -> PaginationResult<Item> {
+        -> GetPageResult<Item> {
             
             let pageSubject = BehaviorRelay<PagingInfo<Item>>(value: PagingInfo<Item>())
             
-            return configPagination(
+            return getPage(
                 pageSubject: pageSubject,
                 pageActivityIndicator: PageActivityIndicator(),
                 errorTracker: ErrorTracker(),
@@ -286,17 +286,17 @@ extension ViewModelType {
             )
     }
     
-    public func configPagination<Item>(
+    public func getPage<Item>(
         pageActivityIndicator: PageActivityIndicator,
         errorTracker: ErrorTracker,
         loadTrigger: Driver<Void>,
         reloadTrigger: Driver<Void>,
         getItems: @escaping () -> Observable<PagingInfo<Item>>)
-        -> PaginationResult<Item> {
+        -> GetPageResult<Item> {
             
             let pageSubject = BehaviorRelay<PagingInfo<Item>>(value: PagingInfo<Item>())
             
-            return configPagination(
+            return getPage(
                 pageSubject: pageSubject,
                 pageActivityIndicator: pageActivityIndicator,
                 errorTracker: errorTracker,
@@ -316,15 +316,15 @@ extension ViewModelType {
             )
     }
     
-    public func configPagination<Item>(
+    public func getPage<Item>(
         loadTrigger: Driver<Void>,
         reloadTrigger: Driver<Void>,
         getItems: @escaping () -> Observable<PagingInfo<Item>>)
-        -> PaginationResult<Item> {
+        -> GetPageResult<Item> {
             
             let pageSubject = BehaviorRelay<PagingInfo<Item>>(value: PagingInfo<Item>())
             
-            return configPagination(
+            return getPage(
                 pageSubject: pageSubject,
                 pageActivityIndicator: PageActivityIndicator(),
                 errorTracker: ErrorTracker(),
