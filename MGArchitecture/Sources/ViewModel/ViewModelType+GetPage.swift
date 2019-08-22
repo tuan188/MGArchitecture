@@ -89,7 +89,10 @@ extension ViewModelType {
                     let newPage = PagingInfo<MappedItem>(
                         page: page.page,
                         items: page.items.map(mapper),
-                        hasMorePages: page.hasMorePages
+                        hasMorePages: page.hasMorePages,
+                        totalItems: page.totalItems,
+                        itemsPerPage: page.itemsPerPage,
+                        totalPages: page.totalPages
                     )
                     
                     pageSubject.accept(newPage)
@@ -123,7 +126,10 @@ extension ViewModelType {
                     let newPage = PagingInfo<MappedItem>(
                         page: page.page,
                         items: items,
-                        hasMorePages: page.hasMorePages
+                        hasMorePages: page.hasMorePages,
+                        totalItems: page.totalItems,
+                        itemsPerPage: page.itemsPerPage,
+                        totalPages: page.totalPages
                     )
                     
                     pageSubject.accept(newPage)
