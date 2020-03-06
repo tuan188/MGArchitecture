@@ -2,13 +2,13 @@ Pod::Spec.new do |s|
 
 # 1
 s.platform = :ios
-s.ios.deployment_target = '9.0'
+s.ios.deployment_target = '10.0'
 s.name = "MGArchitecture"
 s.summary = "Clean Architecture with RxSwift and MVVM"
 s.requires_arc = true
 
 # 2
-s.version = "1.2.1"
+s.version = "1.3.0"
 
 # 3
 s.license = { :type => "MIT", :file => "LICENSE" }
