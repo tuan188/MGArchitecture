@@ -6,8 +6,8 @@ def pods
     
     pod 'MGLoadMore', '~> 0.5'
     
-    pod 'RxSwift', '5.0'
-    pod 'RxCocoa', '5.0'
+    pod 'RxSwift', '5.1'
+    pod 'RxCocoa', '5.1'
     pod 'NSObject+Rx', '5.0'
     
     pod 'Then', '2.4'
