@@ -2,13 +2,13 @@ Pod::Spec.new do |s|
 
 # 1
 s.platform = :ios
-s.ios.deployment_target = '10.0'
+s.ios.deployment_target = '9.0'
 s.name = "MGArchitecture"
 s.summary = "Clean Architecture with RxSwift and MVVM"
 s.requires_arc = true
 
 # 2
-s.version = "1.3.0"
+s.version = "1.3.1"
 
 # 3
 s.license = { :type => "MIT", :file => "LICENSE" }
@@ -35,7 +35,7 @@ s.source_files = "MGArchitecture/Sources/**/*.{swift}"
 # s.resources = "MGArchitecture/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
 
 # 10
-s.swift_version = "5.1"
+s.swift_version = "5.0"
 
 end
 
