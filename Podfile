@@ -4,7 +4,7 @@ def pods
     inhibit_all_warnings!
     use_frameworks!
     
-    pod 'MGLoadMore', '~> 0.5'
+    pod 'MGLoadMore', '~> 2.0.0'
     
     pod 'RxSwift', '5.1'
     pod 'RxCocoa', '5.1'

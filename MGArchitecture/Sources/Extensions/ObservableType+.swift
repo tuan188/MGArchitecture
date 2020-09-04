@@ -44,13 +44,13 @@ extension ObservableType where Element == Bool {
     public static func or(_ sources: Observable<Bool>...)
         -> Observable<Bool> {
             return Observable.combineLatest(sources)
-                .map { $0.reduce(false) { $0 || $1 } }
+                .map { $0.contains(true) }
     }
     
     public static func and(_ sources: Observable<Bool>...)
         -> Observable<Bool> {
             return Observable.combineLatest(sources)
-                .map { $0.reduce(true) { $0 && $1 } }
+                .map { $0.allSatisfy { $0 } }
     }
 }
 

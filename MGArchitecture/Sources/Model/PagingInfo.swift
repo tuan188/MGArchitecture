@@ -14,44 +14,17 @@ public struct PagingInfo<T> {
     public var itemsPerPage: Int
     public var totalPages: Int
     
-    public init(page: Int,
-                items: [T],
-                hasMorePages: Bool,
-                totalItems: Int,
-                itemsPerPage: Int,
-                totalPages: Int) {
+    public init(page: Int = 1,
+                items: [T] = [],
+                hasMorePages: Bool = true,
+                totalItems: Int = 0,
+                itemsPerPage: Int = 0,
+                totalPages: Int = 0) {
         self.page = page
         self.items = items
         self.hasMorePages = hasMorePages
         self.totalItems = totalItems
         self.itemsPerPage = itemsPerPage
         self.totalPages = totalPages
-    }
-    
-    public init(page: Int, items: [T], hasMorePages: Bool) {
-        self.init(page: page,
-                  items: items,
-                  hasMorePages: hasMorePages,
-                  totalItems: 0,
-                  itemsPerPage: 0,
-                  totalPages: 0)
-    }
-    
-    public init(page: Int, items: [T]) {
-        self.init(page: page,
-                  items: items,
-                  hasMorePages: true,
-                  totalItems: 0,
-                  itemsPerPage: 0,
-                  totalPages: 0)
-    }
-    
-    public init() {
-        self.init(page: 1,
-                  items: [],
-                  hasMorePages: true,
-                  totalItems: 0,
-                  itemsPerPage: 0,
-                  totalPages: 0)
     }
 }

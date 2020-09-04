@@ -5,6 +5,8 @@
 //  Created by Tuan Truong on 4/4/19.
 //  Copyright © 2019 Sun Asterisk. All rights reserved.
 //
+
+import RxSwift
 import RxCocoa
 
 struct AppViewModel {
@@ -12,22 +14,24 @@ struct AppViewModel {
     let useCase: AppUseCaseType
 }
 
-// MARK: - ViewModelType
-extension AppViewModel: ViewModelType {
+// MARK: - ViewModel
+extension AppViewModel: ViewModel {
     struct Input {
         let loadTrigger: Driver<Void>
     }
     
     struct Output {
-        let toMain: Driver<Void>
+        
     }
     
-    func transform(_ input: Input) -> Output {
-        let toMain = input.loadTrigger
+    func transform(_ input: Input, disposeBag: DisposeBag) -> Output {
+        input.loadTrigger
             .do(onNext: { _ in
                 self.navigator.toProductList()
             })
+            .drive()
+            .disposed(by: disposeBag)
         
-        return Output(toMain: toMain)
+        return Output()
     }
 }

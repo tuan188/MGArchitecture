@@ -15,6 +15,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var assembler: Assembler = DefaultAssembler()
+    var disposeBag = DisposeBag()
     
     func applicationDidFinishLaunching(_ application: UIApplication) {
         
@@ -30,10 +31,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let vm: AppViewModel = assembler.resolve(window: window)
         let input = AppViewModel.Input(loadTrigger: Driver.just(()))
-        let output = vm.transform(input)
-        
-        output.toMain
-            .drive()
-            .disposed(by: DisposeBag())
+        _ = vm.transform(input, disposeBag: disposeBag)
     }
 }

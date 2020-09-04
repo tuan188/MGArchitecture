@@ -13,11 +13,11 @@ import RxCocoa
 import NSObject_Rx
 import MGLoadMore
 
-final class ProductListViewController: UIViewController, BindableType {
+final class ProductListViewController: UIViewController, Bindable {
 
     // MARK: - IBOutlets
 
-    @IBOutlet weak var tableView: LoadMoreTableView!
+    @IBOutlet weak var tableView: PagingTableView!
 
     // MARK: - Properties
 
@@ -55,9 +55,10 @@ final class ProductListViewController: UIViewController, BindableType {
             selectProductTrigger: tableView.rx.itemSelected.asDriver()
         )
 
-        let output = viewModel.transform(input)
+        let output = viewModel.transform(input, disposeBag: rx.disposeBag)
 
-        output.productList
+        output.$productList
+            .asDriver()
             .drive(tableView.rx.items) { tableView, index, product in
                 return tableView.dequeueReusableCell(
                     for: IndexPath(row: index, section: 0),
@@ -68,29 +69,23 @@ final class ProductListViewController: UIViewController, BindableType {
             }
             .disposed(by: rx.disposeBag)
 
-        output.error
-            .drive()
-            .disposed(by: rx.disposeBag)
-
-        output.isLoading
+        output.$isLoading
+            .asDriver()
             .drive(rx.isLoading)
             .disposed(by: rx.disposeBag)
 
-        output.isReloading
+        output.$isReloading
+            .asDriver()
             .drive(tableView.isRefreshing)
             .disposed(by: rx.disposeBag)
 
-        output.isLoadingMore
+        output.$isLoadingMore
+            .asDriver()
             .drive(tableView.isLoadingMore)
             .disposed(by: rx.disposeBag)
 
-        output.selectedProduct
-            .drive(onNext: { product in
-                print(product.name)
-            })
-            .disposed(by: rx.disposeBag)
-
-        output.isEmpty
+        output.$isEmpty
+            .asDriver()
             .do(onNext: { isEmpty in
                 print("is empty = ", isEmpty)
             })

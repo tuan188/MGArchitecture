@@ -6,7 +6,7 @@
 //  Copyright © 2019 Sun Asterisk. All rights reserved.
 //
 
-enum ScreenLoadingType<Input> {
+public enum ScreenLoadingType<Input> {
     case loading(Input)
     case reloading(Input)
 }
