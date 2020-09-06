@@ -53,32 +53,3 @@ extension ObservableType where Element == Bool {
                 .map { $0.allSatisfy { $0 } }
     }
 }
-
-private func getThreadName() -> String {
-    if Thread.current.isMainThread {
-        return "Main Thread"
-    } else if let name = Thread.current.name {
-        if name.isEmpty {
-            return "Anonymous Thread"
-        }
-        return name
-    } else {
-        return "Unknown Thread"
-    }
-}
-
-extension ObservableType {
-    public func dump() -> Observable<Self.Element> {
-        return self.do(onNext: { element in
-            let threadName = getThreadName()
-            print("[D] \(element) received on \(threadName)")
-        })
-    }
-    
-    public func dumpingSubscription() -> Disposable {
-        return self.subscribe(onNext: { element in
-            let threadName = getThreadName()
-            print("[S] \(element) received on \(threadName)")
-        })
-    }
-}
