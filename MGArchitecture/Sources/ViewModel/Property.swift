@@ -14,14 +14,11 @@ import RxCocoa
 public struct Property<Value> {
     
     private var subject: BehaviorRelay<Value>
-   
+    private let lock = NSLock()
+    
     public var wrappedValue: Value {
-        get {
-            return subject.value
-        }
-        set {
-            subject.accept(newValue)
-        }
+        get { return load() }
+        set { store(newValue: newValue) }
     }
     
     public var projectedValue: BehaviorRelay<Value> {
@@ -30,5 +27,17 @@ public struct Property<Value> {
     
     public init(wrappedValue: Value) {
         subject = BehaviorRelay(value: wrappedValue)
+    }
+    
+    private func load() -> Value {
+        lock.lock()
+        defer { lock.unlock() }
+        return subject.value
+    }
+    
+    private mutating func store(newValue: Value) {
+        lock.lock()
+        defer { lock.unlock() }
+        subject.accept(newValue)
     }
 }
